@@ -1,5 +1,5 @@
-import React from 'react'
-import { Bar,Line } from 'react-chartjs-2';
+import React, { useState } from 'react'
+import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 
@@ -34,6 +34,8 @@ const dummyReports = [
 ]
 
 const PatientReport = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(4);
   const currentDate = new Date();
   const reportsLastMonth = dummyReports.filter(report => {
     const reportDat = new Date(report.reportDate);
@@ -41,6 +43,19 @@ const PatientReport = () => {
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
     return reportDat >= oneMonthAgo && reportDat <= currentDate;
   }).length;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = dummyReports.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(dummyReports.length / itemsPerPage);
+
+  const nextPage = () => {
+    setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
+  };
+
+  const prevPage = () => {
+    setCurrentPage((prevPage) => (prevPage > 1 ? prevPage - 1 : prevPage));
+  };
 
   const totalReportsData = {
     labels: ['Total Reports'],
@@ -77,7 +92,7 @@ const PatientReport = () => {
 
   return (
     <React.Fragment>
-     <div className="container mx-auto p-4">
+     <div className="container mx-auto p-2">
       <div className='flex flex-row justify-between mr-4'>
       <h2 className="text-3xl text-blue-600 font-bold mb-2">Patient Reports</h2>
       <button className='p-2 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
@@ -120,6 +135,15 @@ const PatientReport = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-between items-center mt-3 ">
+        <button onClick={prevPage} disabled={currentPage === 1} className="px-4 py-1 bg-[#005D90] text-white rounded-md">
+          Previous
+        </button>
+        <span>Page {currentPage} of {totalPages}</span>
+        <button onClick={nextPage} disabled={currentPage === totalPages} className="px-4 py-1 text-white rounded-md bg-[#005D90]">
+          Next
+        </button>
       </div>
     </div>
     </React.Fragment>
