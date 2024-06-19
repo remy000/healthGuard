@@ -9,7 +9,7 @@ const dummyReports = [
     title: 'Annual Health Checkup',
     recommendations: 'Increase physical activity and reduce sugar intake.',
     improvements: 'Blood pressure has improved compared to last year.',
-    reportDate: '2023-01-15',
+    reportDate: '2024-06-15',
     patientId: 101,
     patientNames: 'John Doe',
   },
@@ -18,7 +18,7 @@ const dummyReports = [
     title: 'Quarterly Blood Test',
     recommendations: 'Continue current medication and monitor cholesterol levels.',
     improvements: 'Cholesterol levels are stable.',
-    reportDate: '2023-03-20',
+    reportDate: '2024-06-12',
     patientId: 101,
     patientNames: 'John Doe',
   },
@@ -27,7 +27,7 @@ const dummyReports = [
     title: 'Dietary Review',
     recommendations: 'Follow the new diet plan strictly.',
     improvements: 'Weight has reduced by 5kg in the last 3 months.',
-    reportDate: '2023-06-05',
+    reportDate: '2024-06-05',
     patientId: 101,
     patientNames: 'John Doe',
   },
@@ -36,25 +36,11 @@ const dummyReports = [
 const PatientReport = () => {
   const currentDate = new Date();
   const reportsLastMonth = dummyReports.filter(report => {
-    const reportDate = new Date(report.reportDate);
+    const reportDat = new Date(report.reportDate);
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
-    return reportDate >= oneMonthAgo && reportDate <= currentDate;
+    return reportDat >= oneMonthAgo && reportDat <= currentDate;
   }).length;
-
-  // Data for Chart.js
-  const chartData = {
-    labels: dummyReports.map(report => new Date(report.reportDate).toLocaleDateString()),
-    datasets: [
-      {
-        label: 'Reports Distribution',
-        data: dummyReports.map(() => 1), // Each report counts as 1
-        backgroundColor: dummyReports.map((_, index) => `rgba(${(index * 50) % 255}, ${(index * 100) % 255}, ${(index * 150) % 255}, 0.6)`),
-        borderColor: dummyReports.map((_, index) => `rgba(${(index * 50) % 255}, ${(index * 100) % 255}, ${(index * 150) % 255}, 1)`),
-        borderWidth: 1,
-      }
-    ]
-  };
 
   const totalReportsData = {
     labels: ['Total Reports'],
@@ -80,32 +66,7 @@ const PatientReport = () => {
         borderWidth: 1,
       }
     ]
-  };
-
-
-
-  // Options for Chart.js
-  const chartOptions = {
-    scales: {
-      x: {
-        type: 'time',
-        time: {
-          unit: 'week',
-        },
-        title: {
-          display: true,
-          text: 'Date',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Number of Reports',
-        },
-      },
-    },
-  };
-
+  }
   const barChartOptions = {
     scales: {
       y: {
@@ -117,26 +78,23 @@ const PatientReport = () => {
   return (
     <React.Fragment>
      <div className="container mx-auto p-4">
-      <div className='flex flex-row justify-between mx-4'>
-      <h2 className="text-3xl text-blue-600 font-bold mb-4">Patient Reports</h2>
-      <button className='p-3 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
+      <div className='flex flex-row justify-between mr-4'>
+      <h2 className="text-3xl text-blue-600 font-bold mb-2">Patient Reports</h2>
+      <button className='p-2 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
       </div>
-      <h2 className="text-2xl font-bold mb-4">Reports Timeline</h2>
-      <div className='flex flex-row justify-evenly'>
-    
-      <div className="mb-6">
-        <Line data={chartData} options={chartOptions} />
-      </div>
+      <h2 className="text-2xl font-bold mb-4 text-blue-600">Reports Timeline</h2>
+      <div className='flex flex-row justify-evenly mb-2'>
         <div>
-          <h2 className="text-lg font-bold mb-4">Total Reports</h2>
+          <h2 className="text-lg font-bold mb-3">Total Reports</h2>
           <Bar data={totalReportsData} options={barChartOptions} />
         </div>
         <div>
-          <h2 className="text-lg font-bold mb-4">Recent Reports (Last Month)</h2>
+          <h2 className="text-lg font-bold mb-3">Recent Reports (Last Month)</h2>
           <Bar data={recentReportsData} options={barChartOptions} />
         </div>
       </div>
       <div className="overflow-x-auto">
+      <h2 className="text-2xl font-bold mb-4 text-blue-600">Over view</h2>
       <table className="w-full text-sm text-left rtl:text-right">
       <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-sky-700 dark:text-white">
             <tr>
