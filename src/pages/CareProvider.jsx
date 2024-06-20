@@ -112,7 +112,7 @@ const filteredData = sortedData.filter(record =>
                 </tbody>
             </table>
       <div className="flex justify-between items-center mt-6 ">
-        <button onClick={prevPage} disabled={currentPage === 1} className="px-4 py-2 bg-[#005D90] text-white rounded-md">
+        <button onClick={prevPage} disabled={currentPage === 1} className="px-4 py-1 bg-[#005D90] text-white rounded-md">
           Previous
         </button>
         <span>Page {currentPage} of {totalPages}</span>

@@ -130,7 +130,7 @@ const averageStress = stress.reduce((acc, curr) => acc + curr, 0) / dummyData.le
   };
 
   return (
-    <div className='flex flex-col h-full w-full p-2'>
+    <div className='flex flex-col h-full w-full p-3'>
    <div className='flex flex-row justify-between items-center'>
     <h1 className='text-blue-500 text-4xl font-bold'>Progress Tracking</h1>
     <div className='w-[300px] h-[80px] flex mt-4 flex-col bg-blue-300 rounded-lg'>

@@ -19,7 +19,7 @@ const HealthData = () => {
   const filteredData = dummyData.filter(item => item.regDate === selectedDate);
   return (
     <React.Fragment>
-     <div className="container mx-auto py-3 h-full">
+     <div className="container mx-auto p-3 h-full">
      <div className="mb-1 flex flex-row justify-between mx-4 my-4">
         <h1 className='text-3xl text-blue-700 font-bold'>Health Data</h1>
         <div className='w-[300px] h-[70px] flex flex-col bg-blue-500 rounded-lg'>

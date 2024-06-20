@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 const Appointments = () => {
   const [searchTerm,setSearchTerm]=useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage] = useState(10);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
   const data = [
     { id: 1, name: "John Doe", email: "john.doe@example.com", Type: "in-person", Date: "2024-05-20", Status: "Pending" },

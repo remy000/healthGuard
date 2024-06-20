@@ -9,7 +9,7 @@ const PatientLayout = () => {
             <PatientSideBar />
             <div className="flex-1">
       
-              <div className="p-4">{<Outlet />}</div>
+              <div>{<Outlet />}</div>
             </div>
          </div>
     </React.Fragment>
