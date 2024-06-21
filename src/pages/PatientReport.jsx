@@ -27,7 +27,7 @@ const dummyReports = [
     title: 'Dietary Review',
     recommendations: 'Follow the new diet plan strictly.',
     improvements: 'Weight has reduced by 5kg in the last 3 months.',
-    reportDate: '2024-06-05',
+    reportDate: '2024-03-05',
     patientId: 101,
     patientNames: 'John Doe',
   },
@@ -35,7 +35,7 @@ const dummyReports = [
 
 const PatientReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(4);
+  const [itemsPerPage] = useState(3);
   const currentDate = new Date();
   const reportsLastMonth = dummyReports.filter(report => {
     const reportDat = new Date(report.reportDate);
@@ -123,7 +123,7 @@ const PatientReport = () => {
             </tr>
           </thead>
           <tbody>
-            {dummyReports.map(report => (
+            {currentItems.map(report => (
               <tr key={report.reportId} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border">{report.reportId}</td>
                 <td className="py-2 px-4 border">{report.title}</td>

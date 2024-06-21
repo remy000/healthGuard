@@ -21,11 +21,7 @@ const Profile = () => {
   return (
     <React.Fragment>
     <div className="container w-full h-full p-3 bg-gray-200">
-   <div className='flex justify-between my-3'>
     <h1 className="text-4xl font-bold mb-6 text-blue-700">Patient Profile</h1>
-    <button className='px-3 py-1 h-[50px] mx-4 bg-white border border-blue-300'>update</button>
-
-    </div>
       <div className='flex flex-row'>
       <div className='w-[45%] h-[100vh] flex justify-center mt-4'>
         <img src="/src/assets/unnamed.jpg" alt="" className='w-full h-[80%]' />

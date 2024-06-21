@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Modal from 'react-modal';
 
 const CarePlan = () => {
+  const [modalIsOpen,setModalIsOpen]=useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
   return (
     <React.Fragment>
       <div className='flex flex-col h-full w-full mb-3'>
         <div className="px-4 flex flex-row w-full justify-between items-center mt-3">
           <h1 className='text-3xl text-blue-700 font-bold'>Care Plan</h1>
-          <button className='bg-blue-500 text-white p-2 rounded-md'>Update</button>
+          <button onClick={openModal} className='bg-blue-500 text-white p-2 rounded-md'>Update</button>
         </div>
         <div className='flex flex-wrap w-full h-[90vh]'>
           <div className='w-1/2 h-1/2 p-2'>
@@ -68,6 +72,42 @@ const CarePlan = () => {
             </div>
           </div>
         </div>
+        {modalIsOpen&&
+            <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      contentLabel="Add New Patient"
+      className="flex items-center h-[80%] w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
+    >
+      <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
+        <h2 className="text-2xl font-bold mb-3 text-blue-700">Add Care Plan</h2>
+        <form className="w-full h-full ml-8">
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Personalised care Plan</label>
+            <textarea type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Medical Plan</label>
+            <textarea type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Exercise Plan</label>
+            <textarea type="text" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Dietary Plan</label>
+            <textarea type="text" name="bloodGroup" className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+         
+          <div className="flex justify-end gap-4 mt-6 items-center">
+            <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+          </div>
+        </form>
+      </div>
+    </Modal>
+}
       </div>
     </React.Fragment>
   )
