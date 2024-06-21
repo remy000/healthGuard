@@ -4,7 +4,7 @@ const CarePlan = () => {
   return (
     <React.Fragment>
       <div className='flex flex-col h-full w-full mb-3'>
-        <div className="px-4 flex flex-row w-full justify-between items-center">
+        <div className="px-4 flex flex-row w-full justify-between items-center mt-3">
           <h1 className='text-3xl text-blue-700 font-bold'>Care Plan</h1>
           <button className='bg-blue-500 text-white p-2 rounded-md'>Update</button>
         </div>
