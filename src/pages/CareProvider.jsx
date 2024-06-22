@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import Modal from 'react-modal';
 
 const CareProvider = () => {
   const [searchTerm,setSearchTerm]=useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
+  const [modalIsOpen,setModalIsOpen]=useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
   const data = [
     { id: 1, name: "John Doe", email: "john.doe@example.com", sickness: "Flu", age: 29, phone: "555-1234" ,careProvider:"Yes"  },
     { id: 2, name: "Jane Smith", email: "jane.smith@example.com", sickness: "Cold", age: 34, phone: "555-5678"  ,careProvider:"Yes" },
@@ -61,7 +64,7 @@ const filteredData = sortedData.filter(record =>
                 <div className="flex flex-row justify-around items-center w-full">
                 <button onClick={handleSortButtonClick} className="block bg-white-700 hoverbg-[#005D90] text-blue-700 border border-[#005D90]  py-2 px-8 rounded-[40px] my-[1rem]">Sort</button>
                     <input type='text' placeholder='Search ...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} className='text-sm focus:outline-none h-10 w-[24rem] border border-gray-300 rounded-[40px] px-3 pl-11 pr-4' />
-                   <Link to="" className='text-blue-600 underline text-md font-semibold'>Add care provider</Link>
+                   <button onClick={openModal} className='text-blue-600 underline text-md font-semibold'>Add care provider</button>
 
                 </div>
                 <div className="relative overflow-y-auto h-[500px] sm:rounded-lg mt-4 mx-2">
@@ -122,7 +125,67 @@ const filteredData = sortedData.filter(record =>
       </div>
             
             </div>
-            
+            {modalIsOpen&&
+            <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      contentLabel="Add New Patient"
+      className="flex items-center h-[75%] w-[80%] bg-gray-100 p-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+    >
+      <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
+        <h2 className="text-2xl font-bold mb-3 text-blue-700">Add New HealthCare Provider</h2>
+        <form className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-1 px-4">
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Name</label>
+            <input type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Email</label>
+            <input type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Phone Number</label>
+            <input type="text" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Address</label>
+            <input type="text" name="bloodGroup" className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Gender</label>
+            <select name="gender"  className="w-[90%] p-2 border rounded-lg" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Birth Date</label>
+            <input type="date" name="birthDate" className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Nationality</label>
+            <input type="number" name="age"  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Education</label>
+            <input type="text" name="weight" className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+         
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Work experience</label>
+            <input type="number" name="age"  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          
+          <div className="flex justify-end gap-4 mt-4 items-center">
+            <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+          </div>
+        </form>
+      </div>
+    </Modal>
+}  
           
       </div>
 </React.Fragment>
