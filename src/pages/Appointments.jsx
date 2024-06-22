@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
+import Modal from 'react-modal';
 
 const Appointments = () => {
   const [searchTerm,setSearchTerm]=useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
+  const [modalIsOpen,setModalIsOpen]=useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
   const data = [
     { id: 1, name: "John Doe", email: "john.doe@example.com", Type: "in-person", Date: "2024-05-20", Status: "Pending" },
@@ -108,7 +112,7 @@ const filteredData = sortedData.filter(record =>
               {record.Status}
             </td>
                   <td className="px-2 whitespace-nowrap py-1 text-center">
-                   <button onClick={() => {}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
+                   <button onClick={openModal} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
                    <button onClick={() => {}} className="font-medium text-red-600 dark:text-blue-500 hover:underline">delete</button>
                   </td>
                 </tr>
@@ -128,7 +132,39 @@ const filteredData = sortedData.filter(record =>
             
             </div>
             
-          
+            {modalIsOpen&&
+            <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      contentLabel="Add New Patient"
+      className="flex items-center h-[80%] w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
+    >
+      <div className="rounded-lg flex flex-col gap-8 h-full w-full">
+        <h2 className="text-2xl font-bold  text-blue-700 mb-3 mt-4">Appointment Review</h2>
+        <div className='grid grid-cols-1 md:grid-cols-2 mt-6'>
+          <p className='font-medium mt-2'><span className='font-bold'>Patient Names</span>: Dukundane Remy</p>
+          <p className='font-medium mt-2'><span className='font-bold'>Patient Email:</span> dukundaneremy2001@gmail.com</p>
+          <p className='font-medium mt-2'><span className='font-bold'>Patient Phone: 0789615560</span></p>
+          <p className='font-medium mt-2'><span className='font-bold'>Patient sickness: Diabetes</span></p>
+          <p className='font-medium mt-2'><span className='font-bold'>Gender: Male</span></p>
+          <p className='font-medium mt-2'><span className='font-bold'>Ages: 23</span></p>
+          <p className='font-medium mt-2'><span className='font-bold'>Appointment Type: Virtual</span></p>
+          <p className='font-medium mt-2'><span className='font-bold'>Appointment Date: 2024-06-23</span></p>
+          <p className='text-medium mt-2'><span className='font-bold'>Appointment Reason: increase in sugar level</span></p>
+        </div>
+        <div className='mb-1'>
+            <label className="block font-semibold text-gray-700 mb-1">Feedback</label>
+            <textarea type="text" name="bloodGroup" className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='flex justify-around mt-3'>
+            <button className='bg-green-700 px-4 py-2 text-white'>Approve</button>
+            <button className='bg-red-700 px-4 py-2 text-white'>Decline</button>
+            <button onClick={closeModal} className='bg-gray-500 px-4 py-2 text-white'>Cancel</button>
+          </div>
+          </div>
+    </Modal>
+}
       </div>
       </React.Fragment>
   )

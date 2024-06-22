@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
+import Modal from 'react-modal';
 
 const dummyReports = [
   {
@@ -37,6 +38,9 @@ const PatientReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(3);
   const currentDate = new Date();
+  const [modalIsOpen,setModalIsOpen]=useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
   const reportsLastMonth = dummyReports.filter(report => {
     const reportDat = new Date(report.reportDate);
     const oneMonthAgo = new Date();
@@ -95,7 +99,7 @@ const PatientReport = () => {
      <div className="container mx-auto p-2">
       <div className='flex flex-row justify-between mr-4'>
       <h2 className="text-3xl text-blue-600 font-bold mb-2">Patient Reports</h2>
-      <button className='p-2 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
+      <button onClick={openModal} className='p-2 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
       </div>
       <h2 className="text-2xl font-bold mb-4 text-blue-600">Reports Timeline</h2>
       <div className='flex flex-row justify-evenly mb-2'>
@@ -145,6 +149,37 @@ const PatientReport = () => {
           Next
         </button>
       </div>
+        {modalIsOpen&&
+            <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      contentLabel="Add New Patient"
+      className="flex items-center h-[70%] w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
+    >
+      <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
+        <h2 className="text-2xl font-bold mb-3 text-blue-700">Patient Report</h2>
+        <form className="w-full h-full ml-8">
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Title</label>
+            <textarea type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Recommendations</label>
+            <textarea type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Improvements</label>
+            <textarea type="text" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className="flex justify-end gap-4 mt-6 mr-4 items-center">
+            <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+          </div>
+        </form>
+      </div>
+    </Modal>
+}
     </div>
     </React.Fragment>
   )

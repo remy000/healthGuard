@@ -1,7 +1,10 @@
 import React from 'react'
-import { FaUser,FaPhoneAlt } from "react-icons/fa";
+import { FaUser,FaPhoneAlt,FaWeight,FaTransgender,FaAllergies } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { FaLocationDot } from "react-icons/fa6";
+import { MdDateRange,MdSick } from "react-icons/md";
+import { BiSolidDonateBlood } from "react-icons/bi";
+import { SiDatefns } from "react-icons/si";
 
 const Profile = () => {
   const patient = {
@@ -47,19 +50,19 @@ const Profile = () => {
               
               </div>
               </div>
-              <div className='px-4 py-2 bg-white rounded-md shadow-md'>
+              <div className='px-4 py-2 bg-white rounded-md shadow-md pl-8 pb-4'>
               <h2 className="text-xl text-center font-bold text-blue-700 mb-1">Over View</h2>
-              <p><span className="font-semibold text-gray-800 ">Birth Date:</span> {new Date(patient.birthDate).toLocaleDateString()}</p>
-              <p><span className="font-semibold text-gray-800 ">Blood Group:</span> {patient.bloodGroup}</p>
-              <p><span className="font-semibold text-gray-800 ">Weight:</span> {patient.weight}</p>
-              <p><span className="font-semibold text-gray-800 ">Gender:</span> {patient.gender}</p>
-              <p><span className="font-semibold text-gray-800 ">Age:</span> {patient.age}</p>
+              <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date:</span> {new Date(patient.birthDate).toLocaleDateString()}</p>
+              <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group:</span> {patient.bloodGroup}</p>
+              <p className='flex flex-row gap-2 items-center'><FaWeight /><span className="font-semibold text-gray-800 ">Weight:</span> {patient.weight}</p>
+              <p className='flex flex-row gap-2 items-center'><FaTransgender /><span className="font-semibold text-gray-800 ">Gender:</span> {patient.gender}</p>
+              <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age:</span> {patient.age}</p>
               
               </div>
-            <div className="px-4 py-2 bg-white shadow-md rounded-md">
+            <div className="px-4 py-2 bg-white shadow-md rounded-md pl-8 pb-4">
             <h2 className="text-xl text-center font-bold text-blue-700 mb-4">Medical Information</h2>
-              <p><span className="font-semibold text-gray-800 ">Sickness:</span> {patient.sickness}</p>
-              <p><span className="font-semibold text-gray-800 ">Allergies:</span> {patient.allergies}</p>
+              <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness:</span> {patient.sickness}</p>
+              <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies:</span> {patient.allergies}</p>
             </div>
         </div>
       </div>
