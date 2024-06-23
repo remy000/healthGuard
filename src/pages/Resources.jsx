@@ -1,15 +1,15 @@
 import React,{ useState, useRef} from 'react'
 import Modal from 'react-modal'
-
+import { FaPlayCircle } from "react-icons/fa";
 const videos = [
-  { id: 1, title: "Video 1", category:"diabetes", src: "/src/assets/videos/video4.mp4" },
-  { id: 2, title: "Video 2", category:"diabetes", src: "/src/assets/videos/video4.mp4" },
-  { id: 3, title: "Video 3", category:"hypertension", src: "/src/assets/videos/video4.mp4" },
-  { id: 4, title: "Video 4", category:"diabetes", src: "/src/assets/videos/video4.mp4" },
-  { id: 5, title: "Video 5", category:"hypertension", src: "/src/assets/videos/video4.mp4" },
-  { id: 6, title: "Video 6", category:"diabetes", src: "/src/assets/videos/video4.mp4" },
-  { id: 7, title: "Video 7", category:"cardio", src: "/src/assets/videos/video4.mp4" },
-  { id: 8, title: "Video 8", category:"diabetes", src: "/src/assets/videos/video4.mp4" }
+  { id: 1, title: "Video 1", category:"diabetes", src: "/src/assets/video4.mp4" },
+  { id: 2, title: "Video 2", category:"diabetes", src: "/src/assets/video4.mp4" },
+  { id: 3, title: "Video 3", category:"hypertension", src: "/src/assets/video4.mp4" },
+  { id: 4, title: "Video 4", category:"diabetes", src: "/src/assets/video4.mp4" },
+  { id: 5, title: "Video 5", category:"hypertension", src: "/src/assets/video4.mp4" },
+  { id: 6, title: "Video 6", category:"diabetes", src: "/src/assets/video4.mp4" },
+  { id: 7, title: "Video 7", category:"cardio", src: "/src/assets/video4.mp4" },
+  { id: 8, title: "Video 8", category:"diabetes", src: "/src/assets/video4.mp4" }
 ];
 
 const Resources = () => {
@@ -76,7 +76,7 @@ const Resources = () => {
               style={{ display: currentPlayingId === video.id ? 'none' : 'block' }}
               onClick={() => togglePlayPause(video.id)}
             >
-              ▶️
+             <FaPlayCircle size={45} color='white' className='ml-[8rem]'/>
             </button>
             <div className='absolute top-36 left-6'>
               <h3 className='text-white font-semibold text-md text-left'>{video.title}</h3>

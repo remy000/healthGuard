@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal';
-
+import { Link } from "react-router-dom";
 const Patients = () => {
   const [searchTerm,setSearchTerm]=useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage] = useState(10);
   const [modalIsOpen,setModalIsOpen]=useState(false);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
   const data = [
@@ -63,9 +63,9 @@ const openModal = () => setModalIsOpen(true);
                 Patients
                 </h1>
                 <div className="flex flex-row justify-around items-center w-full">
-                <button onClick={handleSortButtonClick} className="block bg-white-700 hoverbg-[#005D90] text-blue-700 border border-[#005D90]  py-2 px-8 rounded-[40px] my-[1rem]">Sort</button>
+                <button onClick={handleSortButtonClick} className="block bg-white hoverbg-[#005D90] text-blue-700 border border-[#005D90]  py-2 px-8 rounded-[40px] my-[1rem]">Sort</button>
                     <input type='text' placeholder='Search ...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} className='text-sm focus:outline-none h-10 w-[24rem] border border-gray-300 rounded-[40px] px-3 pl-11 pr-4' />
-                   <button onClick={openModal} className='text-blue-600 underline text-md font-semibold'>Add Patient</button>
+                   <button onClick={openModal} className='text-blue-600 bg-white underline text-md font-semibold'>Add Patient</button>
 
                 </div>
                 <div className="relative overflow-y-auto h-[500px] sm:rounded-lg mt-4 mx-2">
@@ -108,7 +108,7 @@ const openModal = () => setModalIsOpen(true);
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.age}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.phone}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">
-                    <button onClick={() => {}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
+                    <Link to={`/patient/${record.id}/profile`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</Link>
                   </td>
                 </tr>
               ))}

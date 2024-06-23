@@ -19,8 +19,6 @@ import AdminLayout from './components/AdminLayout';
 import Login from './pages/Login';
 
 function App() {
-  
-// a comment 22
   return (
     <Router>
       <Routes>
@@ -31,7 +29,7 @@ function App() {
           <Route path="appointments" element={<Appointments />} />
           <Route path="reports" element={<Reports />} />
         </Route>
-        <Route path="/patient" element={<PatientLayout />}>
+        <Route path="/patient/:id" element={<PatientLayout />}>
           <Route path="profile" element={<Profile />} />
           <Route path="careplan" element={<CarePlan />} />
           <Route path="healthData" element={<HealthData />} />

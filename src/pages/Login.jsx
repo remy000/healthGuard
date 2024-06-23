@@ -1,7 +1,11 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
+  const navigate=useNavigate();
+  const handleLogin=()=>{
+    navigate('/doctor/patients');
+  }
   return (
     <React.Fragment>
     <div className="flex w-screen h-[100vh] bg-[#5391b3]">
@@ -30,7 +34,7 @@ const Login = () => {
                     <input type="password"  placeholder="Enter your password" className="border border-blue-200 text-gray-500 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5   dark:placeholder-gray-400 dark:text-dark dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
                   </div>
                   <button 
-                   className="block bg-blue-700 hover:bg-blue-800 text-white w-full py-2 px-8 rounded-[40px] mt-[2rem]" onClick={()=>{}}
+                   className="block bg-blue-700 hover:bg-blue-800 text-white w-full py-2 px-8 rounded-[40px] mt-[2rem]" onClick={handleLogin}
                    >Sign In</button>
                     <p className=" mt-6 text-sm text-center">Not a Member? <Link className="text-blue-500" to="/register">create Account</Link></p>
                 </form>
