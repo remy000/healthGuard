@@ -9,15 +9,15 @@ import { SiDatefns } from "react-icons/si";
 const Profile = () => {
   const patient = {
     patientId: 1,
-    names: 'John Doe',
-    email: 'john.doe@example.com',
-    phoneNumber: '123-456-7890',
+    names: 'Dukundane Remy',
+    email: 'dukundaneremy2001@gmail.com',
+    phoneNumber: '0788654321',
     bloodGroup: 'O+',
     birthDate: '1985-05-15',
     weight: '75kg',
     gender: 'Male',
     age: 38,
-    address: '123 Main St, Springfield, IL',
+    address: '123 kt,Nyarugenge,Kigali',
     sickness: 'Hypertension',
     allergies: 'Peanuts',
   }

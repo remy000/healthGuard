@@ -219,27 +219,27 @@ const filteredData = sortedData.filter(record =>
             <div className="flex justify-between flex-col mb-1 ml-6 bg-white px-4 py-2 rounded-md">
             <h2 className="text-xl font-bold text-blue-700 mb-1">Personal Information</h2>
                 <p><span className="font-semibold text-gray-800 ">ID:</span> </p>
-                <p className='flex flex-row gap-2 items-center'><FaUser /><span className="font-semibold text-gray-800 ">Name:</span> </p>
-                <p className='flex flex-row gap-2 items-center'><IoMdMail /><span className="font-semibold text-gray-800 ">Email:</span> </p>
-                <p className='flex flex-row gap-2 items-center'><FaPhoneAlt /><span className="font-semibold text-gray-800 ">Phone Number:</span></p>
-                <p className='flex flex-row gap-2 items-center'><FaLocationDot /><span className="font-semibold text-gray-800 ">Address:</span></p>
+                <p className='flex flex-row gap-2 items-center'><FaUser /><span className="font-semibold text-gray-800 ">Name: Dukundane Remy</span> </p>
+                <p className='flex flex-row gap-2 items-center'><IoMdMail /><span className="font-semibold text-gray-800 ">Email: dukundaneremy2001@gmail.com</span> </p>
+                <p className='flex flex-row gap-2 items-center'><FaPhoneAlt /><span className="font-semibold text-gray-800 ">Phone Number: 0788976543</span></p>
+                <p className='flex flex-row gap-2 items-center'><FaLocationDot /><span className="font-semibold text-gray-800 ">Address: Nyarugenge, Kigali</span></p>
               </div>
               <div className='px-4 py-2 bg-white rounded-md pl-8 pb-2'>
               <h2 className="text-xl font-bold text-blue-700 mb-1">Over View</h2>
-              <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date:</span></p>
-              <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group:</span> </p>
-              <p className='flex flex-row gap-2 items-center'><FaWeight /><span className="font-semibold text-gray-800 ">Weight:</span></p>
-              <p className='flex flex-row gap-2 items-center'><FaTransgender /><span className="font-semibold text-gray-800 ">Gender:</span></p>
-              <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age:</span></p>
+              <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date: 1967-08-12</span></p>
+              <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group: O+</span> </p>
+              <p className='flex flex-row gap-2 items-center'><FaWeight /><span className="font-semibold text-gray-800 ">Weight: 70kg</span></p>
+              <p className='flex flex-row gap-2 items-center'><FaTransgender /><span className="font-semibold text-gray-800 ">Gender: Male</span></p>
+              <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age: 57</span></p>
               
               </div>
             <div className="px-4 py-2 bg-white pl-8 pb-2">
             <h2 className="text-xl font-bold text-blue-700 mb-1">Medical Information</h2>
-              <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness:</span></p>
-              <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies:</span></p>
+              <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness: Diabetes</span></p>
+              <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies: None</span></p>
             </div>
             <div className='mb-2'>
-            <label className="block font-semibold text-gray-700">Sickness</label>
+            <label className="block font-semibold text-gray-700">HealthCare Provider</label>
             <select name="provider"  className="w-[90%] p-2 border rounded-lg" required>
               <option value="">Select Health Care Provider</option>
               <option value="Male">Dr Kamali</option>
