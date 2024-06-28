@@ -1,47 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
 import Modal from 'react-modal';
-
-const dummyReports = [
-  {
-    reportId: 1,
-    title: 'Annual Health Checkup',
-    recommendations: 'Increase physical activity and reduce sugar intake.',
-    improvements: 'Blood pressure has improved compared to last year.',
-    reportDate: '2024-06-15',
-    patientId: 101,
-    patientNames: 'John Doe',
-  },
-  {
-    reportId: 2,
-    title: 'Quarterly Blood Test',
-    recommendations: 'Continue current medication and monitor cholesterol levels.',
-    improvements: 'Cholesterol levels are stable.',
-    reportDate: '2024-06-12',
-    patientId: 101,
-    patientNames: 'John Doe',
-  },
-  {
-    reportId: 3,
-    title: 'Dietary Review',
-    recommendations: 'Follow the new diet plan strictly.',
-    improvements: 'Weight has reduced by 5kg in the last 3 months.',
-    reportDate: '2024-03-05',
-    patientId: 101,
-    patientNames: 'John Doe',
-  },
-]
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const PatientReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(3);
   const currentDate = new Date();
+  const token=sessionStorage.getItem('token');
+  const [reports,setReports]=useState([]);
+  const { id }=useParams();
+
+useEffect(()=>{
+  const fetchReports=async()=>{
+    try {
+      const response = await axios.get(`http://localhost:8080/report/patientReports/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(response.status===200){
+        const data=response.data;
+        setReports(data);
+        console.log(data);
+      }
+      
+    }   catch (error) {
+      console.log(error.message);
+    } finally {
+      console.log(false);
+    }
+  }
+  fetchReports();
+},[token,id]);
+ 
   const [modalIsOpen,setModalIsOpen]=useState(false);
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-  const reportsLastMonth = dummyReports.filter(report => {
+  const reportsLastMonth = reports.filter(report => {
     const reportDat = new Date(report.reportDate);
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(currentDate.getMonth() - 1);
@@ -49,9 +48,9 @@ const PatientReport = () => {
   }).length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = dummyReports.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = reports.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = Math.ceil(dummyReports.length / itemsPerPage);
+  const totalPages = Math.ceil(reports.length / itemsPerPage);
 
   const nextPage = () => {
     setCurrentPage((prevPage) => (prevPage < totalPages ? prevPage + 1 : prevPage));
@@ -66,7 +65,7 @@ const PatientReport = () => {
     datasets: [
       {
         label: 'Total Reports',
-        data: [dummyReports.length],
+        data: [reports.length],
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,

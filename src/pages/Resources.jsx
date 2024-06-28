@@ -1,28 +1,44 @@
-import React,{ useState, useRef} from 'react'
+import React,{ useState, useRef, useEffect} from 'react'
 import Modal from 'react-modal'
 import { FaPlayCircle } from "react-icons/fa";
-const videos = [
-  { id: 1, title: "Reduce sugar", category:"diabetes", src: "/src/assets/video4.mp4" },
-  { id: 2, title: "Yoga exercises", category:"diabetes", src: "/src/assets/video4.mp4" },
-  { id: 3, title: "Insulin measurment", category:"hypertension", src: "/src/assets/video4.mp4" },
-  { id: 4, title: "Measure  blood pressure", category:"diabetes", src: "/src/assets/video4.mp4" },
-  { id: 5, title: "Heart rate reduction", category:"hypertension", src: "/src/assets/video4.mp4" },
-  { id: 6, title: "Meditation", category:"diabetes", src: "/src/assets/video4.mp4" },
-  { id: 7, title: "Video 7", category:"cardio", src: "/src/assets/video4.mp4" },
-  { id: 8, title: "Video 8", category:"diabetes", src: "/src/assets/video4.mp4" }
-];
-
+import axios from 'axios';
 const Resources = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videos,setVideos]=useState([]);
   const [currentPlayingId, setCurrentPlayingId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
  const [openUploadModal,setOpenUploadModal]=useState(false);
   const [videosPerPage] = useState(6);
+  const token=sessionStorage.getItem('token');
   const videoRefs = useRef({});
   const [searchTerm,setSearchTerm]=useState('');
   const uploadModal = () => setOpenUploadModal(true);
   const closeUploadModal = () => setOpenUploadModal(false);
+   
+  useEffect(()=>{
+   const fetchVideos=async()=>{
+      try {
+        const response = await axios.get('http://localhost:8080/resource/allResources', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if(response.status===200){
+          setVideos(response.data);
+        }
+        
+      } catch (error) {
+       
+          console.log(error.message);
+        
+        
+      }
+      
+    }
+    fetchVideos();
+  },[token]);
+
   const indexOfLastVideo = currentPage * videosPerPage;
   const indexOfFirstVideo = indexOfLastVideo - videosPerPage;
   const filteredVideos = videos.filter(video => video.category.toLowerCase().includes(searchTerm.toLowerCase()));
@@ -31,14 +47,14 @@ const Resources = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const togglePlayPause = (id) => {
-    setSelectedVideo(videos.find(video => video.id === id));
+    setSelectedVideo(videos.find(video => video.resourceId === id));
     setCurrentPlayingId(id);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     if (selectedVideo) {
-      videoRefs.current[selectedVideo.id].pause();
+      videoRefs.current[selectedVideo.resourceId].pause();
     }
     setIsModalOpen(false);
     setSelectedVideo(null);
@@ -46,7 +62,7 @@ const Resources = () => {
   };
 
   const handleVideoClick = () => {
-    togglePlayPause(selectedVideo.id);
+    togglePlayPause(selectedVideo.resourceId);
   };
  
 
@@ -62,25 +78,25 @@ const Resources = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {currentVideos.map(video => (
-          <div key={video.id} className="relative">
+          <div key={video.resourceId} className="relative">
             <video
-              ref={el => videoRefs.current[video.id] = el}
+              ref={el => videoRefs.current[video.resourceId] = el}
               className="w-full h-auto"
-              src={video.src}
-              onClick={() => togglePlayPause(video.id)}
+              src={video.uploadPath}
+              onClick={() => togglePlayPause(video.resourceId)}
             >
               Your browser does not support the video tag.
             </video>
             <button
               className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-2xl"
-              style={{ display: currentPlayingId === video.id ? 'none' : 'block' }}
-              onClick={() => togglePlayPause(video.id)}
+              style={{ display: currentPlayingId === video.resourceId ? 'none' : 'block' }}
+              onClick={() => togglePlayPause(video.resourceId)}
             >
              <FaPlayCircle size={45} color='white' className='ml-[8rem]'/>
             </button>
             <div className='absolute top-36 left-6'>
               <h3 className='text-white font-semibold text-md text-left'>{video.title}</h3>
-              <h4 className='text-white font-semibold text-sm text-center'>{video.category}</h4>
+              <h4 className='text-white font-semibold text-sm text-left'>{video.category}</h4>
             </div>
           </div>
         ))}
@@ -111,11 +127,11 @@ const Resources = () => {
               X
             </button>
             <video
-              ref={el => videoRefs.current[selectedVideo.id] = el}
+              ref={el => videoRefs.current[selectedVideo.resourceId] = el}
               autoPlay
               controls
               className="w-full"
-              src={selectedVideo.src}
+              src={selectedVideo.uploadPath}
               onClick={handleVideoClick}
             >
               Your browser does not support the video tag.

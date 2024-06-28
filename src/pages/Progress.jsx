@@ -4,24 +4,59 @@ import { MdBloodtype } from "react-icons/md"
 import { FaHeartPulse } from "react-icons/fa6";
 import { RiMentalHealthFill } from "react-icons/ri";
 import { TbHeartRateMonitor } from "react-icons/tb";
-const dumData = [
-  { id: 1, calories: 130, bodyWater: 60.5, exercisesDuration: 80, heartRate: 75, bloodPressure: 85, respLevel: 18, stressLevel: 55, regDate: '2024-05-23' },
-  { id: 2, calories: 120, bodyWater: 70.8, exercisesDuration: 90, heartRate: 72, bloodPressure: 78, respLevel: 17, stressLevel: 64, regDate: '2024-05-24' },
-  { id: 3, calories: 140, bodyWater: 65.2, exercisesDuration: 95, heartRate: 80, bloodPressure: 75, respLevel: 20, stressLevel: 66, regDate: '2024-05-12' },
-  { id: 4, calories: 110, bodyWater: 75.2, exercisesDuration: 85, heartRate: 80, bloodPressure: 65, respLevel: 16, stressLevel: 77, regDate: '2024-05-16' },
-  { id: 5, calories: 125, bodyWater: 72.2, exercisesDuration: 100, heartRate: 86, bloodPressure: 75, respLevel: 15, stressLevel: 89, regDate: '2024-05-20' },
-  { id: 6, calories: 115, bodyWater: 70.2, exercisesDuration: 75, heartRate: 90, bloodPressure: 70, respLevel: 17, stressLevel: 73, regDate: '2024-05-05' },
-  { id: 7, calories: 105, bodyWater: 80.2, exercisesDuration: 90, heartRate: 70, bloodPressure: 75, respLevel: 26, stressLevel: 85, regDate: '2024-05-23' },
-  { id: 8, calories: 130, bodyWater: 82.2, exercisesDuration: 100, heartRate: 85, bloodPressure: 80, respLevel: 30, stressLevel: 72, regDate: '2024-05-17' },
-  { id: 9, calories: 140, bodyWater: 85.2, exercisesDuration: 95, heartRate: 75, bloodPressure: 90, respLevel: 10, stressLevel: 65, regDate: '2024-05-12' },
-  { id: 10, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-10' },
-  { id: 11, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-19' },
-];
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+// const dumData = [
+//   { id: 1, calories: 130, bodyWater: 60.5, exercisesDuration: 80, heartRate: 75, bloodPressure: 85, respLevel: 18, stressLevel: 55, regDate: '2024-05-23' },
+//   { id: 2, calories: 120, bodyWater: 70.8, exercisesDuration: 90, heartRate: 72, bloodPressure: 78, respLevel: 17, stressLevel: 64, regDate: '2024-05-24' },
+//   { id: 3, calories: 140, bodyWater: 65.2, exercisesDuration: 95, heartRate: 80, bloodPressure: 75, respLevel: 20, stressLevel: 66, regDate: '2024-05-12' },
+//   { id: 4, calories: 110, bodyWater: 75.2, exercisesDuration: 85, heartRate: 80, bloodPressure: 65, respLevel: 16, stressLevel: 77, regDate: '2024-05-16' },
+//   { id: 5, calories: 125, bodyWater: 72.2, exercisesDuration: 100, heartRate: 86, bloodPressure: 75, respLevel: 15, stressLevel: 89, regDate: '2024-05-20' },
+//   { id: 6, calories: 115, bodyWater: 70.2, exercisesDuration: 75, heartRate: 90, bloodPressure: 70, respLevel: 17, stressLevel: 73, regDate: '2024-05-05' },
+//   { id: 7, calories: 105, bodyWater: 80.2, exercisesDuration: 90, heartRate: 70, bloodPressure: 75, respLevel: 26, stressLevel: 85, regDate: '2024-05-23' },
+//   { id: 8, calories: 130, bodyWater: 82.2, exercisesDuration: 100, heartRate: 85, bloodPressure: 80, respLevel: 30, stressLevel: 72, regDate: '2024-05-17' },
+//   { id: 9, calories: 140, bodyWater: 85.2, exercisesDuration: 95, heartRate: 75, bloodPressure: 90, respLevel: 10, stressLevel: 65, regDate: '2024-05-12' },
+//   { id: 10, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-10' },
+//   { id: 11, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-19' },
+// ];
 
 const Progress = () => {
-  const dummyData=dumData.slice(-7);
+  const { id }=useParams();
+  const token=sessionStorage.getItem('token');
+  const [healthData,setHealthData]=useState([]);
+  const [names, setNames] = useState('');
+  const [sickness, setSickness] = useState('');
+
+  useEffect(()=>{
+    const fetchData=async()=>{
+      try {
+        const response = await axios.get(`http://localhost:8080/healthData/findPatientData/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if(response.status===200){
+          const data=response.data;
+          setHealthData(data);
+          if(data.length>0){
+            const { names, sickness } = data[0];
+            setNames(names);
+           setSickness(sickness);
+          }
+        }
+        
+      }   catch (error) {
+        console.log(error.message);
+      } finally {
+        console.log(false);
+      }
+    }
+    fetchData();
+  },[token,id]);
+  const dummyData=healthData.slice(-7);
   const dates = dummyData.map(item => item.regDate);
-  const glucose = dummyData.map(item => item.bodyWater);
+  const glucose = dummyData.map(item => item.bloodGlucose);
   const pressure = dummyData.map(item => item.bloodPressure);
   const heartRate = dummyData.map(item => item.heartRate);
   const stress=dummyData.map(item=>item.stressLevel);
@@ -134,8 +169,8 @@ const averageStress = stress.reduce((acc, curr) => acc + curr, 0) / dummyData.le
    <div className='flex flex-row justify-between items-center'>
     <h1 className='text-blue-500 text-4xl font-bold'>Progress Tracking</h1>
     <div className='w-[300px] h-[80px] flex mt-4 flex-col bg-blue-300 rounded-lg'>
-      <h1 className='text-lg text-white font-semibold ml-4 mt-2'>Dukundane Remy</h1>
-      <h4 className='text-sm text-white font-medium ml-4'>Diabetes</h4>
+      <h1 className='text-lg text-white font-semibold ml-4 mt-2'>{names}</h1>
+      <h4 className='text-sm text-white font-medium ml-4'>{sickness}</h4>
     </div>
    </div>
     <h1 className='text-blue-500 text-2xl mt-2 mb-4 font-semibold'>DashBoard</h1>
@@ -150,19 +185,19 @@ const averageStress = stress.reduce((acc, curr) => acc + curr, 0) / dummyData.le
       <TbHeartRateMonitor  size={35}/>
       <h3 className='text-lg'>Blood Pressure</h3>
       <p className='text-3xl font-bold'>{`${averageBodyPressure.toFixed(2)} mmHg`}</p>
-      <p className='mt-1'>Normal</p>
+      <p className='mt-1'>{averageBodyPressure<90? "low":averageBodyPressure>120?"High":"Normal"}</p>
       </div>
         <div className='bg-green-500 text-white p-4 rounded-lg shadow-md'>
         <RiMentalHealthFill size={35} />
           <h3 className='text-lg'>Stress level</h3>
           <p className='text-3xl font-bold'>{`${averageStress.toFixed(2)} ms`}</p>
-          <p className='mt-1'>Normal</p>
+          <p className='mt-1'>{averageStress<50?"low":averageStress>76?"High":"Medium"}</p>
         </div>
         <div className='bg-yellow-500 text-white p-4 rounded-lg shadow-md'>
         <FaHeartPulse size={35} />
           <h3 className='text-lg'>Heart Rate</h3>
           <p className='text-3xl font-bold'>{`${averageHeartRate.toFixed(2)} bpm`}</p>
-          <p className='mt-1'>Normal</p>
+          <p className='mt-1'>{averageHeartRate<60?"low":averageHeartRate>100?"High":"Normal"}</p>
         </div>
       </div>
       <h1 className='text-blue-500 text-2xl font-semibold'>Charts</h1>

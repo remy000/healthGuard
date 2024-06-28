@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
 import { Link } from "react-router-dom";
 const Patients = () => {
@@ -7,26 +8,55 @@ const Patients = () => {
   const [itemsPerPage] = useState(10);
   const [modalIsOpen,setModalIsOpen]=useState(false);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
-  const data = [
-    { id: 1, name: "John Doe", email: "john.doe@example.com", sickness: "Flu", age: 29, phone: "555-1234" },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com", sickness: "Cold", age: 34, phone: "555-5678" },
-    { id: 3, name: "Emily Johnson", email: "emily.johnson@example.com", sickness: "Asthma", age: 40, phone: "555-9101" },
-    { id: 4, name: "Michael Brown", email: "michael.brown@example.com", sickness: "Diabetes", age: 52, phone: "555-1121" },
-    { id: 5, name: "Sarah Davis", email: "sarah.davis@example.com", sickness: "Hypertension", age: 45, phone: "555-3141" },
-    { id: 6, name: "Chris Lee", email: "chris.lee@example.com", sickness: "Heart Disease", age: 50, phone: "555-5671" },
-    { id: 7, name: "Anna Scott", email: "anna.scott@example.com", sickness: "Arthritis", age: 60, phone: "555-8765" },
-    { id: 8, name: "Robert Miller", email: "robert.miller@example.com", sickness: "Chronic Pain", age: 55, phone: "555-4321"},
-    { id: 9, name: "Linda Taylor", email: "linda.taylor@example.com", sickness: "Migraine", age: 42, phone: "555-6789" },
-    { id: 10, name: "Steven Anderson", email: "steven.anderson@example.com", sickness: "Back Pain", age: 38, phone: "555-0987" },
-    { id: 11, name: "John Doe", email: "john.doe@example.com", sickness: "Flu", age: 29, phone: "555-1234" },
-    { id: 12, name: "Jane Smith", email: "jane.smith@example.com", sickness: "Cold", age: 34, phone: "555-5678" },
-    { id: 13, name: "Emily Johnson", email: "emily.johnson@example.com", sickness: "Asthma", age: 40, phone: "555-9101" },
-    { id: 14, name: "Michael Brown", email: "michael.brown@example.com", sickness: "Diabetes", age: 52, phone: "555-1121" },
-    { id: 15, name: "Sarah Davis", email: "sarah.davis@example.com", sickness: "Hypertension", age: 45, phone: "555-3141" },
-  ];
-  const sortedData = data.sort((a, b) => {
-    const dateA = new Date(a.id);
-    const dateB = new Date(b.id);
+  const [patients,setPatients]=useState([]);
+  const email=sessionStorage.getItem('email');
+  const token=sessionStorage.getItem('token');
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
+
+  useEffect(() => {
+    const fetchProvider = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8080/provider/findProviderByEmail/${email}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (response.status === 200) {
+          const data = response.data;
+          sessionStorage.setItem("names",data.names);
+          fetchPatients(data.providerId);
+        }
+      } catch (error) {
+        setError(error.message);
+      }
+    };
+
+    const fetchPatients = async (providerId) => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:8080/patient/patientByProvider/${providerId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (response.status === 200) {
+          setPatients(response.data);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProvider();
+  }, [email, token]);
+
+
+  const sortedData = patients.sort((a, b) => {
+    const dateA = new Date(a.patientId);
+    const dateB = new Date(b.patientId);
     if (isSortingAsc) {
         return dateB - dateA;
     } else {
@@ -34,7 +64,7 @@ const Patients = () => {
     }
 });
 const filteredData = sortedData.filter(record =>
-  record.name.toLowerCase().includes(searchTerm)
+  record.names.toLowerCase().includes(searchTerm)
 );
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -62,14 +92,19 @@ const openModal = () => setModalIsOpen(true);
                 <h1 className="text-3xl font-bold text-center mt-3 mb-6 text-blue-600 ml-10">
                 Patients
                 </h1>
+                {error&&(
+                      <p className="text-red-600 font-semibold m-2 text-sm">{error}</p>
+                    )}
                 <div className="flex flex-row justify-around items-center w-full">
                 <button onClick={handleSortButtonClick} className="block bg-white hoverbg-[#005D90] text-blue-700 border border-[#005D90]  py-2 px-8 rounded-[40px] my-[1rem]">Sort</button>
                     <input type='text' placeholder='Search ...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} className='text-sm focus:outline-none h-10 w-[24rem] border border-gray-300 rounded-[40px] px-3 pl-11 pr-4' />
                    <button onClick={openModal} className='text-blue-600 bg-white underline text-md font-semibold'>Add Patient</button>
 
                 </div>
+                {
+                  loading&&<p>please wait.....</p>
+                }
                 <div className="relative overflow-y-auto h-[500px] sm:rounded-lg mt-4 mx-2">
-       
                 <table className="w-full text-sm text-left rtl:text-right">
                 <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-sky-700 dark:text-white">
                 <tr>
@@ -101,14 +136,14 @@ const openModal = () => setModalIsOpen(true);
                     
                 {currentItems.map((record) => (
                 <tr key={record.id} className="bg-white border hover:bg-[#E1E9F4] ">
-                  <td className="px-4 py-2 whitespace-nowrap text-center">{record.id}</td>
-                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.name}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-center">{record.patientId}</td>
+                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.names}</td>
                   <td className="px-4 whitespace-nowrap py-1text-center">{record.email}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.sickness}</td>
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.age}</td>
-                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.phone}</td>
+                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.phoneNumber}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">
-                    <Link to={`/patient/${record.id}/profile`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</Link>
+                    <Link to={`/patient/${record.patientId}/profile`} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</Link>
                   </td>
                 </tr>
               ))}
