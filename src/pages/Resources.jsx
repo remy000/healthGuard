@@ -12,9 +12,23 @@ const Resources = () => {
   const [videosPerPage] = useState(6);
   const token=sessionStorage.getItem('token');
   const videoRefs = useRef({});
+  const [resource, setResource] = useState({
+    title: '',
+    category: '',
+  });
+  const [file, setFile] = useState(null);
   const [searchTerm,setSearchTerm]=useState('');
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
   const uploadModal = () => setOpenUploadModal(true);
   const closeUploadModal = () => setOpenUploadModal(false);
+  const handleChange = (e) => {
+    setResource({
+      ...resource,
+      [e.target.name]: e.target.value,
+    });
+  };
    
   useEffect(()=>{
    const fetchVideos=async()=>{
@@ -64,7 +78,38 @@ const Resources = () => {
   const handleVideoClick = () => {
     togglePlayPause(selectedVideo.resourceId);
   };
- 
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    for (const key in resource) {
+      formData.append(key, resource[key]);
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8080/resource/saveResource', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        setMessage('Resource uploaded successfully');
+      } else {
+        setMessage('Failed to upload resource');
+      }
+    } catch (error) {
+      setMessage(`Failed to upload resource: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -153,15 +198,15 @@ const Resources = () => {
         <form className="w-full h-full p-5">
           <div className='mb-2'>
             <label className="block font-semibold text-gray-700">Title</label>
-            <input type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name='title' value={resource.title}  onChange={handleChange}   className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-2'>
             <label className="block font-semibold text-gray-700">Category</label>
-            <input type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="email" name='category' value={resource.category} onChange={handleChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-2'>
             <label className="block font-semibold text-gray-700">Upload</label>
-            <input type="file" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="file" name="file"  onChange={handleFileChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className="flex justify-end gap-4 mt-6 items-center">
             <button type="button" onClick={closeUploadModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
