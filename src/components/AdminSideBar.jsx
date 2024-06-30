@@ -23,6 +23,7 @@ const AdminSideBar = () => {
                     <img src="/src/assets/logo.png" className="w-[110px] h-[110px] rounded-[50%]" />
                 </div>
                 <div className="flex-1 py-8 flex flex-col gap-4">
+                <h2 className='font-bold mb-10 ml-5 text-lg'>Admin</h2>
                     {ADMIN_SIDEBAR_LINKS.map((item) => (
                         <SidebarLink key={item.key} item={item} />
                     ))}

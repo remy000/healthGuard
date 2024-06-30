@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-modal';
 
 const CareProvider = () => {
@@ -7,28 +8,36 @@ const CareProvider = () => {
   const [itemsPerPage] = useState(8);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
   const [modalIsOpen,setModalIsOpen]=useState(false);
+  const token=sessionStorage.getItem('token');
+  const [data,setData]=useState([]);
+  const [loading,setLoading]=useState(false);
+  const [error,setError]=useState('');
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-  const data = [
-    { id: 1, name: "John Doe", email: "john.doe@example.com", sickness: "Flu", age: 29, phone: "555-1234" ,careProvider:"Yes"  },
-    { id: 2, name: "Jane Smith", email: "jane.smith@example.com", sickness: "Cold", age: 34, phone: "555-5678"  ,careProvider:"Yes" },
-    { id: 3, name: "Emily Johnson", email: "emily.johnson@example.com", sickness: "Asthma", age: 40, phone: "555-9101" ,careProvider:"Yes"  },
-    { id: 4, name: "Michael Brown", email: "michael.brown@example.com", sickness: "Diabetes", age: 52, phone: "555-1121" ,careProvider:"No"  },
-    { id: 5, name: "Sarah Davis", email: "sarah.davis@example.com", sickness: "Hypertension", age: 45, phone: "555-3141" ,careProvider:"No"  },
-    { id: 6, name: "Chris Lee", email: "chris.lee@example.com", sickness: "Heart Disease", age: 50, phone: "555-5671"  ,careProvider:"Yes" },
-    { id: 7, name: "Anna Scott", email: "anna.scott@example.com", sickness: "Arthritis", age: 60, phone: "555-8765"  ,careProvider:"No" },
-    { id: 8, name: "Robert Miller", email: "robert.miller@example.com", sickness: "Chronic Pain", age: 55, phone: "555-4321" ,careProvider:"Yes" },
-    { id: 9, name: "Linda Taylor", email: "linda.taylor@example.com", sickness: "Migraine", age: 42, phone: "555-6789" ,careProvider:"Yes"  },
-    { id: 10, name: "Steven Anderson", email: "steven.anderson@example.com", sickness: "Back Pain", age: 38, phone: "555-0987" ,careProvider:"No"  },
-    { id: 11, name: "John Doe", email: "john.doe@example.com", sickness: "Flu", age: 29, phone: "555-1234" ,careProvider:"Yes"  },
-    { id: 12, name: "Jane Smith", email: "jane.smith@example.com", sickness: "Cold", age: 34, phone: "555-5678"  ,careProvider:"No" },
-    { id: 13, name: "Emily Johnson", email: "emily.johnson@example.com", sickness: "Asthma", age: 40, phone: "555-9101"  ,careProvider:"Yes" },
-    { id: 14, name: "Michael Brown", email: "michael.brown@example.com", sickness: "Diabetes", age: 52, phone: "555-1121" ,careProvider:"No"  },
-    { id: 15, name: "Sarah Davis", email: "sarah.davis@example.com", sickness: "Hypertension", age: 45, phone: "555-3141" ,careProvider:"Yes"  },
-  ];
+  useEffect(()=>{
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`http://localhost:8080/provider/allCareProviders`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        if (response.status === 200) {
+          const filteredData = response.data.filter(provider => provider.roles !== 'admin');
+          setData(filteredData);
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+   },[token])
   const sortedData = data.sort((a, b) => {
-    const dateA = new Date(a.id);
-    const dateB = new Date(b.id);
+    const dateA = new Date(a.providerId);
+    const dateB = new Date(b.providerId);
     if (isSortingAsc) {
         return dateB - dateA;
     } else {
@@ -36,7 +45,7 @@ const CareProvider = () => {
     }
 });
 const filteredData = sortedData.filter(record =>
-  record.name.toLowerCase().includes(searchTerm)
+  record.names.toLowerCase().includes(searchTerm)
 );
 
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -61,6 +70,9 @@ const filteredData = sortedData.filter(record =>
                 <h1 className="text-3xl font-bold mt-3 mb-6 text-blue-600 ml-2">
                 Health Care Providers
                 </h1>
+                {error&&(
+                      <p className="text-red-600 font-semibold m-2 text-sm">{error}</p>
+                    )}
                 <div className="flex flex-row justify-around items-center w-full">
                 <button onClick={handleSortButtonClick} className="block bg-white-700 hoverbg-[#005D90] text-blue-700 border border-[#005D90]  py-2 px-8 rounded-[40px] my-[1rem]">Sort</button>
                     <input type='text' placeholder='Search ...' value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} className='text-sm focus:outline-none h-10 w-[24rem] border border-gray-300 rounded-[40px] px-3 pl-11 pr-4' />
@@ -68,6 +80,9 @@ const filteredData = sortedData.filter(record =>
 
                 </div>
                 <div className="relative overflow-y-auto h-[500px] sm:rounded-lg mt-4 mx-2">
+                {
+                  loading&&<p>please wait.....</p>
+                }
        
                 <table className="w-full text-sm text-left rtl:text-right">
                 <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-sky-700 dark:text-white">
@@ -82,10 +97,10 @@ const filteredData = sortedData.filter(record =>
                             Email
                         </th>
                         <th scope="col" className="px-6 py-3 text-sm text-center  bg-[#005D90]">
-                            Speciality
+                            Specialization
                         </th>
                         <th scope="col" className="px-6 py-3 text-sm  text-center bg-[#005D90]">
-                            Age
+                            Gender
                         </th>
                         <th scope="col" className="px-6 py-3 text-sm  text-center bg-[#005D90]">
                             Phone
@@ -100,12 +115,12 @@ const filteredData = sortedData.filter(record =>
                     
                 {currentItems.map((record) => (
                 <tr key={record.id} className="bg-white border hover:bg-[#E1E9F4] ">
-                  <td className="px-4 py-2 whitespace-nowrap text-center">{record.id}</td>
-                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.name}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-center">{record.providerId}</td>
+                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.names}</td>
                   <td className="px-4 whitespace-nowrap py-1text-center">{record.email}</td>
-                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.sickness}</td>
-                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.age}</td>
-                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.phone}</td>
+                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.specialization}</td>
+                  <td className="px-4  whitespace-nowrap py-1 text-center">{record.gender}</td>
+                  <td className="px-4 whitespace-nowrap py-1 text-center">{record.phoneNumber}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">
                     <button onClick={() => {}} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
                   </td>
@@ -129,7 +144,7 @@ const filteredData = sortedData.filter(record =>
             <Modal
       isOpen={openModal}
       onRequestClose={closeModal}
-      contentLabel="Add New Patient"
+      contentLabel="Add New Provider"
       className="flex items-center h-[75%] w-[80%] bg-gray-100 p-3 rounded-lg shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
     >

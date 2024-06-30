@@ -7,7 +7,6 @@ const Appointments = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(8);
   const [modalIsOpen,setModalIsOpen]=useState(false);
-  const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
   const [isSortingAsc, setIsSortingAsc] = useState(true);
   const [appointments,setAppointments]=useState([]);
@@ -15,6 +14,11 @@ const Appointments = () => {
   const token=sessionStorage.getItem('token');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [selectedAppt,setSelectedAppt]=useState(null);
+  const openModal = (appointment) => {
+    setModalIsOpen(true);
+    setSelectedAppt(appointment);
+  }
 
   useEffect(() => {
     const fetchProvider = async () => {
@@ -130,7 +134,7 @@ const filteredData = sortedData.filter(record =>
                 <tbody>
                     
                 {currentItems.map((record) => (
-                <tr key={record.id} className="bg-white border hover:bg-[#E1E9F4] ">
+                <tr key={record.appointmentId} className="bg-white border hover:bg-[#E1E9F4] ">
                   <td className="px-4 py-2 whitespace-nowrap text-center">{record.appointmentId}</td>
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.names}</td>
                   <td className="px-4 whitespace-nowrap py-1text-center">{record.email}</td>
@@ -139,12 +143,12 @@ const filteredData = sortedData.filter(record =>
                   <td className={
                     record.status === 'Approved' ? 'text-green-600 font-medium' :
                     record.status === 'Rejected' ? 'text-red-600 font-medium' :
-              'text-black'
+              'text-black text-center'
             }>
               {record.status}
             </td>
                   <td className="px-2 whitespace-nowrap py-1 text-center">
-                   <button onClick={openModal} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
+                   <button onClick={()=>openModal(record)} className="font-medium text-blue-600 mr-2 dark:text-blue-500 hover:underline">view</button>
                    <button onClick={() => {}} className="font-medium text-red-600 dark:text-blue-500 hover:underline">delete</button>
                   </td>
                 </tr>
@@ -175,15 +179,11 @@ const filteredData = sortedData.filter(record =>
       <div className="rounded-lg flex flex-col h-full w-full">
         <h2 className="text-2xl font-bold  text-blue-700 mb-3 mt-5">Appointment Review</h2>
         <div className='grid grid-cols-1 md:grid-cols-2 mt-3 p-3'>
-          <p className='font-medium mt-4'><span className='font-bold'>Patient Names</span>: Dukundane Remy</p>
-          <p className='font-medium mt-4'><span className='font-bold'>Patient Email:</span> dukundaneremy2001@gmail.com</p>
-          <p className='font-medium mt-4'><span className='font-bold'>Patient Phone: 0789615560</span></p>
-          <p className='font-medium mt-4'><span className='font-bold'>Patient sickness: Diabetes</span></p>
-          <p className='font-medium mt-4'><span className='font-bold'>Gender: Male</span></p>
-          <p className='font-medium mt-4'><span className='font-bold'>Ages: 23</span></p>
-          <p className='font-medium mt-4'><span className='font-bold'>Appointment Type: Virtual</span></p>
-          <p className='font-medium mt-4'><span className='font-bold'>Appointment Date: 2024-06-23</span></p>
-          <p className='text-medium mt-4'><span className='font-bold'>Appointment Reason: increase in sugar level</span></p>
+          <p className='font-medium mt-4'><span className='font-bold'>Patient Names</span>: {selectedAppt.names}</p>
+          <p className='font-medium mt-4'><span className='font-bold'>Patient Email:</span> {selectedAppt.email}</p>
+          <p className='font-medium mt-4'><span className='font-bold'>Appointment Type: {selectedAppt.type}</span></p>
+          <p className='font-medium mt-4'><span className='font-bold'>Appointment Date: {selectedAppt.requestDate}</span></p>
+          <p className='text-medium mt-4'><span className='font-bold'>Appointment Reason: {selectedAppt.description}</span></p>
         </div>
         <div className='mt-5'>
             <label className="block font-semibold text-gray-700 mb-2">Feedback</label>

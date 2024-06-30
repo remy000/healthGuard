@@ -13,6 +13,21 @@ const Patients = () => {
   const token=sessionStorage.getItem('token');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [formData, setFormData] = useState({
+    names: '',
+    email: '',
+    phoneNumber: '',
+    bloodGroup: '',
+    birthDate: '',
+    weight: '',
+    gender: '',
+    age: 0,
+    address: '',
+    sickness: '',
+    allergies: '',
+    password: 'default'
+  });
+
 
   useEffect(() => {
     const fetchProvider = async () => {
@@ -85,6 +100,31 @@ const filteredData = sortedData.filter(record =>
 };
 const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+  const handleSubmit=async()=>{
+    setLoading(true);
+    try {
+      const response=await axios.post("http://localhost:8080/patient/register",formData,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(response.status===200){
+        closeModal();
+        setLoading(false);
+      }
+      
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  }
  
   return (
       <React.Fragment>
@@ -172,33 +212,36 @@ const openModal = () => setModalIsOpen(true);
       <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
         <h2 className="text-2xl font-bold mb-3 text-blue-700">Add New Patient</h2>
         <form className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-1 px-4">
+        {error&&(
+                      <p className="text-red-600 font-semibold m-2 text-sm">{error}</p>
+                    )}
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Name</label>
-            <input type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name='names'  value={formData.names} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Email</label>
-            <input type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="email" name='email' value={formData.email} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Phone Number</label>
-            <input type="text" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Blood Group</label>
-            <input type="text" name="bloodGroup" className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="bloodGroup" value={formData.bloodGroup} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Birth Date</label>
-            <input type="date" name="birthDate" className="w-[90%] p-2 border rounded-lg" required />
+            <input type="date" name="birthDate" value={formData.birthDate} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Weight</label>
-            <input type="text" name="weight" className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="weight" value={formData.weight} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Gender</label>
-            <select name="gender"  className="w-[90%] p-2 border rounded-lg" required>
+            <select name="gender"  value={formData.gender} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required>
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -206,23 +249,24 @@ const openModal = () => setModalIsOpen(true);
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Age</label>
-            <input type="number" name="age"  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="number" name="age"  value={formData.age} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Address</label>
-            <input type="text" name="address" className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="address" value={formData.address} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Sickness</label>
-            <input type="text" name="sickness"  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="sickness"  value={formData.sickness} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Allergies</label>
-            <input type="text" name="allergies"  className="w-[90%] p-2 border rounded-lg" required />
+            <input type="text" name="allergies"  value={formData.allergies} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className="flex justify-end gap-4 mt-4 items-center">
             <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+            disabled={loading}>{loading?"Loading":"Save"}</button>
           </div>
         </form>
       </div>

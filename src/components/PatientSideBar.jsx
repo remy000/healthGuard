@@ -18,6 +18,7 @@ function SidebarLink({ item }) {
     )
 }
 const PatientSideBar = () => {
+    const providerNames=sessionStorage.getItem("names");
   return (
     <React.Fragment>
         <div className="bg-[#005D90] w-60 p-3 flex flex-col text-white">
@@ -25,6 +26,7 @@ const PatientSideBar = () => {
                     <img src="/src/assets/logo.png" className="w-[110px] h-[110px] rounded-[50%]" />
                 </div>
                 <div className="flex-1 py-8 flex flex-col gap-4">
+                <h2 className='font-bold mb-10 ml-5 text-lg'>Dr.{providerNames}</h2>
                     {PATIENT_SIDEBAR_LINKS.map((item) => (
                         <SidebarLink key={item.key} item={item} />
                     ))}

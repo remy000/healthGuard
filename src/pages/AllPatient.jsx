@@ -18,11 +18,15 @@ const AllPatient = () => {
   const [patients,setPatients]=useState([]);
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [providers,setProviders]=useState([]);
   const [profileModal,setProfileModal]=useState(false);
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
-  const openProfileModal=()=>setProfileModal(true);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [providerId,setProviderId]=useState(null);
+
   const closeProfileModal=()=>setProfileModal(false);
+ 
  
  useEffect(()=>{
   const fetchPatients = async () => {
@@ -43,7 +47,34 @@ const AllPatient = () => {
     }
   };
   fetchPatients();
- },[token])
+ },[token]);
+
+ const fetchData = async () => {
+  setLoading(true);
+  try {
+    const response = await axios.get(`http://localhost:8080/provider/allCareProviders`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if (response.status === 200) {
+      const filteredData = response.data.filter(provider => provider.roles !== 'admin');
+      setProviders(filteredData);
+    }
+  } catch (error) {
+    setError(error.message);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const openProfileModal = (patient) => {
+  setSelectedPatient(patient);
+  setProfileModal(true);
+  fetchData();
+};
+
+
   const sortedData = patients.sort((a, b) => {
     const dateA = new Date(a.patientId);
     const dateB = new Date(b.patientId);
@@ -73,6 +104,24 @@ const filteredData = sortedData.filter(record =>
   const handleSortButtonClick = () => {
     setIsSortingAsc(!isSortingAsc);
 };
+const handleAssign=async(Patid)=>{
+  setLoading(true);
+    try {
+      const response=await axios.post(`http://localhost:8080/patient/assignProvider/${Patid}/${providerId}`,{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(response.status===200){
+        closeModal();
+        setLoading(false);
+      }
+      
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+}
   return (
     <React.Fragment>
       <div className="flex flex-col h-full ">
@@ -134,7 +183,7 @@ const filteredData = sortedData.filter(record =>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.phoneNumber}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.assignedProvider}</td>
                   <td className="px-4 whitespace-nowrap py-1 text-center">
-                    <button onClick={openProfileModal} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
+                    <button onClick={()=>openProfileModal(record)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline">view</button>
                   </td>
                 </tr>
               ))}
@@ -232,37 +281,52 @@ const filteredData = sortedData.filter(record =>
       <div className="rounded-lg p-4 w-[65%]">        
             <div className="flex justify-between flex-col mb-1 ml-6 bg-white px-4 py-2 rounded-md">
             <h2 className="text-xl font-bold text-blue-700 mb-1">Personal Information</h2>
-                <p><span className="font-semibold text-gray-800 ">ID:</span> </p>
-                <p className='flex flex-row gap-2 items-center'><FaUser /><span className="font-semibold text-gray-800 ">Name: Dukundane Remy</span> </p>
-                <p className='flex flex-row gap-2 items-center'><IoMdMail /><span className="font-semibold text-gray-800 ">Email: dukundaneremy2001@gmail.com</span> </p>
-                <p className='flex flex-row gap-2 items-center'><FaPhoneAlt /><span className="font-semibold text-gray-800 ">Phone Number: 0788976543</span></p>
-                <p className='flex flex-row gap-2 items-center'><FaLocationDot /><span className="font-semibold text-gray-800 ">Address: Nyarugenge, Kigali</span></p>
+                <p><span className="font-semibold text-gray-800 ">ID:{selectedPatient.patientId}</span> </p>
+                <p className='flex flex-row gap-2 items-center'><FaUser /><span className="font-semibold text-gray-800 ">Name: {selectedPatient.names}</span> </p>
+                <p className='flex flex-row gap-2 items-center'><IoMdMail /><span className="font-semibold text-gray-800 ">Email: {selectedPatient.email}</span> </p>
+                <p className='flex flex-row gap-2 items-center'><FaPhoneAlt /><span className="font-semibold text-gray-800 ">Phone Number: {selectedPatient.phoneNumber}</span></p>
+                <p className='flex flex-row gap-2 items-center'><FaLocationDot /><span className="font-semibold text-gray-800 ">Address: {selectedPatient.address}</span></p>
               </div>
               <div className='px-4 py-2 bg-white rounded-md pl-8 pb-2'>
               <h2 className="text-xl font-bold text-blue-700 mb-1">Over View</h2>
-              <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date: 1967-08-12</span></p>
-              <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group: O+</span> </p>
-              <p className='flex flex-row gap-2 items-center'><FaWeight /><span className="font-semibold text-gray-800 ">Weight: 70kg</span></p>
-              <p className='flex flex-row gap-2 items-center'><FaTransgender /><span className="font-semibold text-gray-800 ">Gender: Male</span></p>
-              <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age: 57</span></p>
+              <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date: {selectedPatient.birthDate}</span></p>
+              <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group: {selectedPatient.bloodGroup}</span> </p>
+              <p className='flex flex-row gap-2 items-center'><FaWeight /><span className="font-semibold text-gray-800 ">Weight: {selectedPatient.weight}kg</span></p>
+              <p className='flex flex-row gap-2 items-center'><FaTransgender /><span className="font-semibold text-gray-800 ">Gender: {selectedPatient.gender}</span></p>
+              <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age: {selectedPatient.age}</span></p>
               
               </div>
             <div className="px-4 py-2 bg-white pl-8 pb-2">
             <h2 className="text-xl font-bold text-blue-700 mb-1">Medical Information</h2>
-              <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness: Diabetes</span></p>
-              <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies: None</span></p>
+              <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness: {selectedPatient.sickness}</span></p>
+              <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies: {selectedPatient.allergies}</span></p>
             </div>
-            <div className='mb-2'>
+            <div className='mb-2 mt-3'>
+              {selectedPatient.assignedProvider==='no'?(
+                <>
             <label className="block font-semibold text-gray-700">HealthCare Provider</label>
-            <select name="provider"  className="w-[90%] p-2 border rounded-lg" required>
+            {
+             providers.map((provider)=>(
+                 <>
+                  <select key={provider.providerId} value={providerId} onChange={(e)=>setProviderId(e.target.value)} name="provider"  className="w-[90%] p-2 border rounded-lg" required>
               <option value="">Select Health Care Provider</option>
-              <option value="Male">Dr Kamali</option>
-              <option value="Female">Dr Kalisa</option>
+              <option value={provider.providerId}>Dr {provider.names}</option>
             </select>
+                 </>
+             ))
+            
+           
+             }
+            </>
+              ):(
+               <div></div>
+              )
+}
           </div>
           <div className="flex justify-start gap-4 mt-6">
             <button type="button" onClick={closeProfileModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={()=>handleAssign(selectedPatient.patientId)} className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+              disabled={loading}>{loading?"loading...":"Save"}</button>
           </div>
         </div>
     </div>
