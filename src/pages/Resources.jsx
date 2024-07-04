@@ -195,6 +195,9 @@ const Resources = () => {
     >
       <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
         <h2 className="text-2xl font-bold mb-3 text-blue-700">Education Resource Uploading</h2>
+        {message&&(
+          <p className='text-center text-lg text-green-500 my-4'>{message}</p>
+        )}
         <form className="w-full h-full p-5">
           <div className='mb-2'>
             <label className="block font-semibold text-gray-700">Title</label>
@@ -210,7 +213,7 @@ const Resources = () => {
           </div>
           <div className="flex justify-end gap-4 mt-6 items-center">
             <button type="button" onClick={closeUploadModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded-lg" disabled={loading}>{loading?"loading...":"save"}</button>
           </div>
         </form>
       </div>

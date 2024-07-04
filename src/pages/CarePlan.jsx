@@ -13,6 +13,7 @@ const CarePlan = () => {
   const [error,setError]=useState('');
   const [uploadError,setUploadError]=useState('');
   const [hasPlan, setHasPlan] = useState(false);
+  const [planId,setPlanId]=useState(0);
   const [plan,setPlan]=useState({
   personalizedPlan:'',
   medicalPlan:'',
@@ -26,6 +27,8 @@ const CarePlan = () => {
   const medicalPlanSentences = splitByPeriod(plan.medicalPlan);
   const exercisePlanSentences = splitByPeriod(plan.exercisePlan);
   const dietPlanSentences = splitByPeriod(plan.dietPlan);
+
+  //fetching carePlan
    useEffect(()=>{
    const fetchPlan=async()=>{
     try {
@@ -41,7 +44,8 @@ const CarePlan = () => {
           medicalPlan:data.medicalPlan,
           exercisePlan:data.exercisePlan,
           dietPlan:data.dietPlan
-        })
+        });
+        setPlanId(data.planId);
         const hasRealData = Object.values(data).some(value => value !== '' && value !== 0);
         setHasPlan(hasRealData);
       }
@@ -62,6 +66,48 @@ const CarePlan = () => {
       [name]: value
     });
   };
+
+ //create or add carePlan
+ const addPlan=async(e)=>{
+  e.preventDefault();
+  try {
+    const response = await axios.get('http://localhost:8080/carePlan/savePlan',plan, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if(response.status===200){
+      closeModal();
+    }
+    
+  } catch (error) {
+    setUploadError(error);
+    
+  }
+ };
+ const updatedPlan={
+  planId,...plan
+ }
+ //update carePlan
+ const updatePlan=async(e)=>{
+  e.preventDefault();
+  try {
+    const response = await axios.put('http://localhost:8080/carePlan/updatePlan',updatedPlan, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if(response.status===200){
+      closeModal();
+    }
+    
+  } catch (error) {
+    setUploadError(error);
+    
+  }
+ }
+
+
   return (
     <React.Fragment>
       <div className='flex flex-col h-full w-full mb-3'>
@@ -159,6 +205,11 @@ const CarePlan = () => {
             <p className='text-center text-red-500 text-sm'>{error}</p>
           )
         }
+         {
+          loading&&(
+            <p className='text-center text-gray-500 text-sm'>Loading....</p>
+          )
+        }
         <form className="w-full h-full ml-8">
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Personalised care Plan</label>
@@ -179,7 +230,7 @@ const CarePlan = () => {
          
           <div className="flex justify-end gap-4 mt-6 items-center">
             <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={hasPlan?addPlan:updatePlan} className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
           </div>
         </form>
       </div>
