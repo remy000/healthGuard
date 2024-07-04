@@ -32,8 +32,8 @@ const DoctorSidebar = () => {
                 </div>
                 <div  
                     className={classNames(' text-white cursor-pointer', linkClasses)}>
-                        <Link to="/home" className="text-xl"><HiOutlineLogout /></Link>
-                        Home
+                        <button to="/home" className="bg-[#005D90] text-white flex flex-row gap-2 p-1"><HiOutlineLogout size={25} />
+                        Logout</button>
                     </div>
             </div>
 

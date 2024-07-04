@@ -33,7 +33,7 @@ const PatientSideBar = () => {
                 </div>
                 <div  
                     className={classNames(' text-white cursor-pointer', linkClasses)}>
-                        <Link to="/home" className="text-xl"><HiOutlineLogout /></Link>
+                        <Link to="/doctor/patients" className="text-xl"><HiOutlineLogout /></Link>
                         Home
                     </div>
             </div>

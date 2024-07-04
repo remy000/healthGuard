@@ -26,6 +26,7 @@ const Patients = () => {
           const data = response.data;
           sessionStorage.setItem("names",data.names);
           fetchPatients(data.providerId);
+          sessionStorage.setItem("providerId",data.providerId);
         }
       } catch (error) {
         setError(error.message);
@@ -132,7 +133,7 @@ const filteredData = sortedData.filter(record =>
                 <tbody>
                     
                 {currentItems.map((record) => (
-                <tr key={record.id} className="bg-white border hover:bg-[#E1E9F4] ">
+                <tr key={record.patientId} className="bg-white border hover:bg-[#E1E9F4] ">
                   <td className="px-4 py-2 whitespace-nowrap text-center">{record.patientId}</td>
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.names}</td>
                   <td className="px-4 whitespace-nowrap py-1text-center">{record.email}</td>

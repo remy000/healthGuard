@@ -10,10 +10,19 @@ const PatientReport = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(3);
   const currentDate = new Date();
+  const [error,setError]=useState('');
+  const[loading,setLoading]=useState(false);
   const token=sessionStorage.getItem('token');
+  const providerId=sessionStorage.getItem("providerId");
   const [reports,setReports]=useState([]);
   const { id }=useParams();
-
+  const [report,setReport]=useState({
+    title:'',
+    recommendations:'',
+    improvements:'',
+    patientId:id,
+    providerId:providerId
+  })
 useEffect(()=>{
   const fetchReports=async()=>{
     try {
@@ -25,14 +34,11 @@ useEffect(()=>{
       if(response.status===200){
         const data=response.data;
         setReports(data);
-        console.log(data);
       }
       
     }   catch (error) {
-      console.log(error.message);
-    } finally {
-      console.log(false);
-    }
+      setError(error.message);
+    } 
   }
   fetchReports();
 },[token,id]);
@@ -92,12 +98,50 @@ useEffect(()=>{
       },
     },
   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setReport({
+      ...report,
+      [name]: value
+    });
+  };
+  const validateReport = () => {
+    if (!report.title || !report.recommendations || !report.improvements) {
+        setError("All inputs are required");
+        setLoading(false);
+        return false;
+    }
+    return true;
+};
+  const saveReport=async(e)=>{
+    setLoading(true);
+    e.preventDefault();
+    if (!validateReport()) {
+      return;
+  }
+    try {
+      const response = await axios.post('http://localhost:8080/report/saveReport',report, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      if(response.status===200){
+       closeModal();
+       setLoading(false);
+      }
+      
+    }   catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
+  }
 
   return (
     <React.Fragment>
      <div className="container mx-auto p-2">
       <div className='flex flex-row justify-between mr-4'>
       <h2 className="text-3xl text-blue-600 font-bold mb-2">Patient Reports</h2>
+      
       <button onClick={openModal} className='p-2 mb-4 mx-4 bg-[#005D90] text-white'>new Report</button>
       </div>
       <h2 className="text-2xl font-bold mb-4 text-blue-600">Reports Timeline</h2>
@@ -159,21 +203,26 @@ useEffect(()=>{
       <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
         <h2 className="text-2xl font-bold mb-3 text-blue-700">Patient Report</h2>
         <form className="w-full h-full ml-8">
+          {
+            error&&(
+              <p className='text-lg text-center text-red-600 font-semibold my-4'>{error}</p>
+            )
+          }
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Title</label>
-            <textarea type="text" name='name'  className="w-[90%] p-2 border rounded-lg" required />
+            <textarea type="text" name='title' value={report.title} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Recommendations</label>
-            <textarea type="email" name='email'  className="w-[90%] p-2 border rounded-lg" required />
+            <textarea type="email" name='recommendations' value={report.recommendations} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='mb-1'>
             <label className="block font-semibold text-gray-700">Improvements</label>
-            <textarea type="text" name="phoneNumber"  className="w-[90%] p-2 border rounded-lg" required />
+            <textarea type="text" name="improvements" value={report.improvements} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className="flex justify-end gap-4 mt-6 mr-4 items-center">
             <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={saveReport} className="bg-blue-500 text-white px-4 py-1 rounded-lg" disabled={loading}>{loading?"loading....":'save'}</button>
           </div>
         </form>
       </div>

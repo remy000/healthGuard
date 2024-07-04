@@ -70,18 +70,21 @@ const CarePlan = () => {
  //create or add carePlan
  const addPlan=async(e)=>{
   e.preventDefault();
+  setLoading(true);
   try {
-    const response = await axios.get('http://localhost:8080/carePlan/savePlan',plan, {
+    const response = await axios.post('http://localhost:8080/carePlan/savePlan',plan, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
     if(response.status===200){
       closeModal();
+      setLoading(false);
     }
     
   } catch (error) {
     setUploadError(error);
+    setLoading(false);
     
   }
  };
@@ -91,6 +94,7 @@ const CarePlan = () => {
  //update carePlan
  const updatePlan=async(e)=>{
   e.preventDefault();
+  setLoading(true);
   try {
     const response = await axios.put('http://localhost:8080/carePlan/updatePlan',updatedPlan, {
       headers: {
@@ -99,10 +103,12 @@ const CarePlan = () => {
     });
     if(response.status===200){
       closeModal();
+      setLoading(false);
     }
     
   } catch (error) {
     setUploadError(error);
+    setLoading(false);
     
   }
  }
@@ -230,7 +236,7 @@ const CarePlan = () => {
          
           <div className="flex justify-end gap-4 mt-6 items-center">
             <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
-            <button type="submit" onClick={hasPlan?addPlan:updatePlan} className="bg-blue-500 text-white px-4 py-1 rounded-lg">Save</button>
+            <button type="submit" onClick={hasPlan?updatePlan:addPlan} className="bg-blue-500 text-white px-4 py-1 rounded-lg" disabled={loading}>{loading?"loading...":hasPlan?"Update":"Save"}</button>
           </div>
         </form>
       </div>
