@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react'
 import { DOCTOR_SIDEBAR_LINKS } from '../constants/Navigations'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { HiOutlineLogout } from 'react-icons/hi'
 import classNames from 'classnames'
 const linkClasses = 'flex items-center  gap-2 font-light px-3 py-2 hover:bg-[#79A2E4] hover:no-underline active:bg-[#E1E9F4] rounded-sm text-base '
@@ -18,6 +18,11 @@ function SidebarLink({ item }) {
 }
 const DoctorSidebar = () => {
     const providerNames=sessionStorage.getItem("names");
+    const navigate=useNavigate();
+    const logout=()=>{
+        sessionStorage.clear();
+        navigate("/");
+    }
   return (
     <React.Fragment>
           <div className="bg-[#005D90] w-60 p-3 flex flex-col text-white">
@@ -32,7 +37,8 @@ const DoctorSidebar = () => {
                 </div>
                 <div  
                     className={classNames(' text-white cursor-pointer', linkClasses)}>
-                        <button to="/home" className="bg-[#005D90] text-white flex flex-row gap-2 p-1"><HiOutlineLogout size={25} />
+                        <button to="/home" className="bg-[#005D90] text-white flex flex-row gap-2 p-1" onClick={logout}
+                        ><HiOutlineLogout size={25} />
                         Logout</button>
                     </div>
             </div>

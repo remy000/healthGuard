@@ -7,20 +7,6 @@ import { TbHeartRateMonitor } from "react-icons/tb";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-// const dumData = [
-//   { id: 1, calories: 130, bodyWater: 60.5, exercisesDuration: 80, heartRate: 75, bloodPressure: 85, respLevel: 18, stressLevel: 55, regDate: '2024-05-23' },
-//   { id: 2, calories: 120, bodyWater: 70.8, exercisesDuration: 90, heartRate: 72, bloodPressure: 78, respLevel: 17, stressLevel: 64, regDate: '2024-05-24' },
-//   { id: 3, calories: 140, bodyWater: 65.2, exercisesDuration: 95, heartRate: 80, bloodPressure: 75, respLevel: 20, stressLevel: 66, regDate: '2024-05-12' },
-//   { id: 4, calories: 110, bodyWater: 75.2, exercisesDuration: 85, heartRate: 80, bloodPressure: 65, respLevel: 16, stressLevel: 77, regDate: '2024-05-16' },
-//   { id: 5, calories: 125, bodyWater: 72.2, exercisesDuration: 100, heartRate: 86, bloodPressure: 75, respLevel: 15, stressLevel: 89, regDate: '2024-05-20' },
-//   { id: 6, calories: 115, bodyWater: 70.2, exercisesDuration: 75, heartRate: 90, bloodPressure: 70, respLevel: 17, stressLevel: 73, regDate: '2024-05-05' },
-//   { id: 7, calories: 105, bodyWater: 80.2, exercisesDuration: 90, heartRate: 70, bloodPressure: 75, respLevel: 26, stressLevel: 85, regDate: '2024-05-23' },
-//   { id: 8, calories: 130, bodyWater: 82.2, exercisesDuration: 100, heartRate: 85, bloodPressure: 80, respLevel: 30, stressLevel: 72, regDate: '2024-05-17' },
-//   { id: 9, calories: 140, bodyWater: 85.2, exercisesDuration: 95, heartRate: 75, bloodPressure: 90, respLevel: 10, stressLevel: 65, regDate: '2024-05-12' },
-//   { id: 10, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-10' },
-//   { id: 11, calories: 150, bodyWater: 88.2, exercisesDuration: 80, heartRate: 80, bloodPressure: 85, respLevel: 20, stressLevel: 76, regDate: '2024-05-19' },
-// ];
-
 const Progress = () => {
   const { id }=useParams();
   const token=sessionStorage.getItem('token');
