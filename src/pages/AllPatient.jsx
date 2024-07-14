@@ -122,8 +122,7 @@ const filteredData = sortedData.filter(record =>
   const handleSortButtonClick = () => {
     setIsSortingAsc(!isSortingAsc);
 };
-const handleAssign=async(patid,e)=>{
-  e.preventDefault();
+const handleAssign=async(patid)=>{
   setLoading(true);
     try {
       const response=await axios.post(`http://localhost:8080/patient/assignProvider/${patid}/${providerId}`, {},{

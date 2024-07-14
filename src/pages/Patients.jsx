@@ -11,7 +11,7 @@ const Patients = () => {
   const token=sessionStorage.getItem('token');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
- 
+  const [hasData, setHasData] = useState(false);
 
 
   useEffect(() => {
@@ -43,6 +43,7 @@ const Patients = () => {
         });
         if (response.status === 200) {
           setPatients(response.data);
+          setHasData(true);
         }
       } catch (error) {
         setError(error.message);
@@ -99,9 +100,14 @@ const filteredData = sortedData.filter(record =>
                   
 
                 </div>
+                
                 {
-                  loading&&<p>please wait.....</p>
+                  loading&&<p className='text-2xl text-center text-blue-500 m-10'>please wait.....</p>
                 }
+                {
+                  hasData?(
+
+                 
                 <div className="relative overflow-y-auto h-[500px] sm:rounded-lg mt-4 mx-2">
                 <table className="w-full text-sm text-left rtl:text-right">
                 <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-sky-700 dark:text-white">
@@ -159,8 +165,9 @@ const filteredData = sortedData.filter(record =>
       </div>
             
             </div>
-            
-            
+             ):(
+              <p className='text-3xl text-center mt-52 text-gray-400 ml-96 font-bold'>No Data Found</p>
+             )}
           
       </div>
       </React.Fragment>

@@ -15,6 +15,9 @@ const Appointments = () => {
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
   const [selectedAppt,setSelectedAppt]=useState(null);
+  const [feedback,setFeedback]=useState('');
+  const [apptError,setApptError]=useState('');
+  const [approving,setApproving]=useState('');
   const openModal = (appointment) => {
     setModalIsOpen(true);
     setSelectedAppt(appointment);
@@ -86,6 +89,25 @@ const filteredData = sortedData.filter(record =>
   const handleSortButtonClick = () => {
     setIsSortingAsc(!isSortingAsc);
 };
+  
+ const approveRequest=async(id)=>{
+  setApproving(true);
+  try {
+    const response=await axios.post(`http://localhost:8080/appointment//findAppointment/${id}`,{feedback},{
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+    });
+    if(response.status===200){
+      closeModal();
+      setApproving(false);
+    }
+    
+  } catch (error) {
+    setApptError(error.message);
+    setApproving(false);
+  }
+ }
 
   return (
       <React.Fragment>
@@ -178,6 +200,9 @@ const filteredData = sortedData.filter(record =>
     >
       <div className="rounded-lg flex flex-col h-full w-full">
         <h2 className="text-2xl font-bold  text-blue-700 mb-3 mt-5">Appointment Review</h2>
+        {apptError&&(
+                      <p className="text-red-600 font-semibold m-2 text-sm text-center">{apptError}</p>
+                    )}
         <div className='grid grid-cols-1 md:grid-cols-2 mt-3 p-3'>
           <p className='font-medium mt-4'><span className='font-bold'>Patient Names</span>: {selectedAppt.names}</p>
           <p className='font-medium mt-4'><span className='font-bold'>Patient Email:</span> {selectedAppt.email}</p>
@@ -187,10 +212,13 @@ const filteredData = sortedData.filter(record =>
         </div>
         <div className='mt-5'>
             <label className="block font-semibold text-gray-700 mb-2">Feedback</label>
-            <textarea type="text" name="bloodGroup" className="w-[90%] p-2 border rounded-lg" required />
+            <textarea type="text" name="feedback" value={feedback} onChange={(e)=>setFeedback(e.target.value)} className="w-[90%] p-2 border rounded-lg" required />
           </div>
           <div className='flex justify-around mt-5'>
-            <button className='bg-green-700 px-4 py-2 text-white'>Approve</button>
+            <button className='bg-green-700 px-4 py-2 text-white'
+            onClick={()=>approveRequest(selectedAppt.appointmentId)}
+            disabled={approving}
+            >{approving?'approving....':'approve'}</button>
             <button className='bg-red-700 px-4 py-2 text-white'>Decline</button>
             <button onClick={closeModal} className='bg-gray-500 px-4 py-2 text-white'>Cancel</button>
           </div>

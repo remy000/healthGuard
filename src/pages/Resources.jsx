@@ -50,7 +50,11 @@ const Resources = () => {
       }
       
     }
+    const interval = setInterval(() => {
+      fetchVideos();
+    }, 3000);
     fetchVideos();
+    return () => clearInterval(interval);
   },[token]);
 
   const indexOfLastVideo = currentPage * videosPerPage;
@@ -101,6 +105,7 @@ const Resources = () => {
       });
       if (response.status === 200) {
         setMessage('Resource uploaded successfully');
+        closeUploadModal();
       } else {
         setMessage('Failed to upload resource');
       }
