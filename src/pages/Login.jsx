@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
@@ -122,7 +122,7 @@ const Login = () => {
                   <button 
                    className="block bg-blue-700 hover:bg-blue-800 text-white w-full py-2 px-8 rounded-[40px] mt-[2rem]" onClick={handleLogin}
                     disabled={loading}>{loading?'please wait...':'Sign In'}</button>
-                    <p className=" mt-6 text-sm text-center">Not a Member? <Link className="text-blue-500" to="/register">create Account</Link></p>
+                    {/* <p className=" mt-6 text-sm text-center">Not a Member? <Link className="text-blue-500" to="/register">create Account</Link></p> */}
                 </form>
               </div>
             </div>

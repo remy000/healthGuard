@@ -16,6 +16,7 @@ function SidebarLink({ item }) {
     )
 }
 const AdminSideBar = () => {
+    
   return (
    <React.Fragment>
       <div className="bg-[#005D90] w-60  p-3 flex flex-col text-white">
@@ -30,8 +31,8 @@ const AdminSideBar = () => {
                 </div>
                 <div  
                     className={classNames(' text-white cursor-pointer', linkClasses)}>
-                        <Link to="/home" className="text-xl"><HiOutlineLogout /></Link>
-                        Home
+                        <Link to="/" className="text-xl"><HiOutlineLogout /></Link>
+                        Logout
                     </div>
             </div>
 

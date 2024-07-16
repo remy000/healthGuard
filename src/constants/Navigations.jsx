@@ -22,12 +22,6 @@ export const DOCTOR_SIDEBAR_LINKS = [
 		label: 'appointments',
 		path: 'appointments',
 		icon: <HiOutlineUsers />
-	},
-	{
-		key: 'reports',
-		label: 'reports',
-		path: 'reports',
-		icon: <HiOutlineDocumentText />
 	}
 ]
 

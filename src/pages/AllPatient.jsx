@@ -17,6 +17,7 @@ const AllPatient = () => {
   const token=sessionStorage.getItem('token');
   const [patients,setPatients]=useState([]);
   const [loading,setLoading]=useState(false);
+  const [loadin,setLoadin]=useState(false);
   const [error,setError]=useState('');
   const [providers,setProviders]=useState([]);
   const [profileModal,setProfileModal]=useState(false);
@@ -44,7 +45,7 @@ const AllPatient = () => {
  
  useEffect(()=>{
   const fetchPatients = async () => {
-    setLoading(true);
+
     try {
       const response = await axios.get(`http://localhost:8080/patient/allPatients`, {
         headers: {
@@ -56,9 +57,7 @@ const AllPatient = () => {
       }
     } catch (error) {
       setError(error.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
   const interval = setInterval(() => {
     fetchPatients();
@@ -150,7 +149,7 @@ const handleInputChange = (e) => {
 };
 const handleSubmit=async(e)=>{
   e.preventDefault();
-  setLoading(true);
+  setLoadin(true);
   try {
     const response=await axios.post("http://localhost:8080/patient/register",formData,{
       headers: {
@@ -159,12 +158,12 @@ const handleSubmit=async(e)=>{
     });
     if(response.status===200){
       closeModal();
-      setLoading(false);
+      setLoadin(false);
     }
     
   } catch (error) {
     setError(error.message);
-    setLoading(false);
+    setLoadin(false);
   }
 }
 
@@ -309,7 +308,7 @@ const handleSubmit=async(e)=>{
           <div className="flex justify-end gap-4 mt-4 items-center">
             <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
             <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded-lg"
-            disabled={loading}>{loading?"Loading":"Save"}</button>
+            disabled={loadin}>{loading?"Loading":"Save"}</button>
           </div>
         </form>
       </div>

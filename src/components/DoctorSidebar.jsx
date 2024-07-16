@@ -35,14 +35,12 @@ const DoctorSidebar = () => {
                         <SidebarLink key={item.key} item={item} />
                     ))}
                 </div>
-                <div  
-                    className={classNames(' text-white cursor-pointer', linkClasses)}>
-                        <button to="/home" className="bg-[#005D90] text-white flex flex-row gap-2 p-1" onClick={logout}
+                <div>
+                        <button to="/home" className=" ml-10 mb-6 bg-[#005D90] text-white hover:bg-none hover:border-none flex flex-row gap-2 p-1" onClick={logout}
                         ><HiOutlineLogout size={25} />
                         Logout</button>
                     </div>
             </div>
-
     </React.Fragment>
   )
 }
