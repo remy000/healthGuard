@@ -7,12 +7,18 @@ import { BiSolidDonateBlood } from "react-icons/bi";
 import { SiDatefns } from "react-icons/si";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Modal from 'react-modal';
 
 const Profile = () => {
   const { id }=useParams();
   const token=sessionStorage.getItem('token');
   const [loading,setLoading]=useState(false);
   const [error,setError]=useState('');
+  const [updateError,setUpdateError]=useState('');
+  const [modalIsOpen,setModalIsOpen]=useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+  const [loadin,setLoadin]=useState(false);
   const [patient,setPatient] =useState({
     patientId: 0,
     names: '',
@@ -61,10 +67,41 @@ useEffect(()=>{
   }; 
   fetchPatient();
 },[token,id])
+
+const handleInputChange = (e) => {
+  const { name, value } = e.target;
+  setPatient({
+    ...patient,
+    [name]: value
+  });
+};
+const handleSubmit=async(e)=>{
+  e.preventDefault();
+  setLoadin(true);
+  try {
+    const response = await axios.put('http://localhost:8080/patient/updatePatient',patient, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    if(response.status===200){
+      setLoadin(false);
+      closeModal();
+    }
+    
+  } catch (error) {
+    setUpdateError(error.message);
+    
+  }
+
+}
   return (
     <React.Fragment>
     <div className="container w-full h-full p-3 bg-gray-200">
+    <div className='flex justify-between mx-6 mt-4'>
     <h1 className="text-4xl font-bold mb-6 text-blue-700">Patient Profile</h1>
+    <button onClick={openModal} className='text-blue-600 underline text-md font-semibold'>Update</button>
+    </div>
     {error&&(
       <p className="text-red-600 font-semibold m-2 text-sm">{error}</p>
     )}
@@ -113,6 +150,81 @@ useEffect(()=>{
         </div>
       </div>
       </div>
+      {modalIsOpen&&
+            <Modal
+      isOpen={openModal}
+      onRequestClose={closeModal}
+      contentLabel="Add New Patient"
+      className="flex items-center h-[98%] w-[80%] bg-gray-100 p-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+    >
+      <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
+        <h2 className="text-2xl font-bold mb-3 text-blue-700">Add New Patient</h2>
+        <form className="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-1 px-4">
+        {updateError&&(
+                      <p className="text-red-600 font-semibold m-2 text-sm">{updateError}</p>
+                    )}
+           <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Name</label>
+            <input type="text" name='patientId' value={patient.patientId} onChange={handleInputChange} disabled={true} className="w-[90%] p-2 border rounded-lg bg-gray-400" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Name</label>
+            <input type="text" name='names'  value={patient.names} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Email</label>
+            <input type="email" name='email' value={patient.email} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Phone Number</label>
+            <input type="text" name="phoneNumber" value={patient.phoneNumber} onChange={handleInputChange}  className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Blood Group</label>
+            <input type="text" name="bloodGroup" value={patient.bloodGroup} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Birth Date</label>
+            <input type="date" name="birthDate" value={patient.birthDate} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Weight</label>
+            <input type="text" name="weight" value={patient.weight} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Gender</label>
+            <select name="gender"  value={patient.gender} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Age</label>
+            <input type="number" name="age"  value={patient.age} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Address</label>
+            <input type="text" name="address" value={patient.address} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Sickness</label>
+            <input type="text" name="sickness"  value={patient.sickness} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className='mb-1'>
+            <label className="block font-semibold text-gray-700">Allergies</label>
+            <input type="text" name="allergies"  value={patient.allergies} onChange={handleInputChange} className="w-[90%] p-2 border rounded-lg" required />
+          </div>
+          <div className="flex justify-end gap-4 mt-4 items-center">
+            <button type="button" onClick={closeModal} className="bg-gray-400 text-white px-4 py-1 rounded-lg">Cancel</button>
+            <button type="submit" onClick={handleSubmit} className="bg-blue-500 text-white px-4 py-1 rounded-lg"
+            disabled={loadin}>{loading?"Loading":"Save"}</button>
+          </div>
+        </form>
+      </div>
+    </Modal>
+} 
     </div>
 </React.Fragment>
   )

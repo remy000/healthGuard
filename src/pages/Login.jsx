@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import {  useNavigate } from 'react-router-dom'
+import {  Link, useNavigate } from 'react-router-dom'
 import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
@@ -93,9 +93,9 @@ const Login = () => {
   return (
     <React.Fragment>
     <div className="flex w-screen h-[100vh] bg-[#5391b3]">
-      <div className=" z-30 flex flex-row  bg-white w-[68%] h-[80%] mt-16 ml-[13rem]">
+      <div className=" z-30 flex flex-row  bg-white w-[65%] h-[80%] mt-16 ml-[15rem]">
            <div className="flex">
-           <img src="/src/assets/login.jpg" className="w-[800px] h-[95%%] rounded-e-3xl object-fill"/>
+           <img src="/src/assets/login.jpg" className="w-[800px] h-[100%] rounded-e-3xl object-fill"/>
            <div className='z-20 absolute top-64 text-center ml-10'>
             <h1 className='text-white font-bold mb-5 text-5xl'>Health Guard</h1>
            <p className='text-white text-lg font-medium overflow-auto'>We Provide Home Care Service For Your Family</p>
@@ -122,7 +122,7 @@ const Login = () => {
                   <button 
                    className="block bg-blue-700 hover:bg-blue-800 text-white w-full py-2 px-8 rounded-[40px] mt-[2rem]" onClick={handleLogin}
                     disabled={loading}>{loading?'please wait...':'Sign In'}</button>
-                    {/* <p className=" mt-6 text-sm text-center">Not a Member? <Link className="text-blue-500" to="/register">create Account</Link></p> */}
+                    <p className=" mt-6 text-sm text-center">Not a Member? <Link className="text-blue-500" to="/register">create Account</Link></p>
                 </form>
               </div>
             </div>
