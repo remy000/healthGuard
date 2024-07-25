@@ -163,8 +163,8 @@ const filteredData = sortedData.filter(record =>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.type}</td>
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.requestDate}</td>
                   <td className={
-                    record.status === 'Approved' ? 'text-green-600 font-medium' :
-                    record.status === 'Rejected' ? 'text-red-600 font-medium' :
+                    record.status === 'approved' ? 'text-green-600 font-medium text-center' :
+                    record.status === 'rejected' ? 'text-red-600 font-medium text-center' :
               'text-black text-center'
             }>
               {record.status}
@@ -194,8 +194,8 @@ const filteredData = sortedData.filter(record =>
             <Modal
       isOpen={openModal}
       onRequestClose={closeModal}
-      contentLabel="Add New Patient"
-      className="flex items-center h-[80%] w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
+      contentLabel="Appointment Review"
+      className="flex items-center h-auto w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
     >
       <div className="rounded-lg flex flex-col h-full w-full">
@@ -210,10 +210,16 @@ const filteredData = sortedData.filter(record =>
           <p className='font-medium mt-4'><span className='font-bold'>Appointment Date: {selectedAppt.requestDate}</span></p>
           <p className='text-medium mt-4'><span className='font-bold'>Appointment Reason: {selectedAppt.description}</span></p>
         </div>
-        <div className='mt-5'>
+        {
+            selectedAppt.status==="pending"?(
+              <>
+            <div className='mt-5'>
             <label className="block font-semibold text-gray-700 mb-2">Feedback</label>
             <textarea type="text" name="feedback" value={feedback} onChange={(e)=>setFeedback(e.target.value)} className="w-[90%] p-2 border rounded-lg" required />
           </div>
+          
+
+          
           <div className='flex justify-around mt-5'>
             <button className='bg-green-700 px-4 py-2 text-white'
             onClick={()=>approveRequest(selectedAppt.appointmentId)}
@@ -222,6 +228,11 @@ const filteredData = sortedData.filter(record =>
             <button className='bg-red-700 px-4 py-2 text-white'>Decline</button>
             <button onClick={closeModal} className='bg-gray-500 px-4 py-2 text-white'>Cancel</button>
           </div>
+          </>
+            ):(
+              <div></div>
+            )
+}
           </div>
     </Modal>
 }

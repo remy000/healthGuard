@@ -121,8 +121,8 @@ const filteredData = sortedData.filter(record =>
                   <td className="px-4 whitespace-nowrap py-1 text-center">{record.type}</td>
                   <td className="px-4  whitespace-nowrap py-1 text-center">{record.requestDate}</td>
                   <td className={
-                    record.status === 'Approved' ? 'text-green-600 font-medium' :
-                    record.status === 'Rejected' ? 'text-red-600 font-medium' :
+                    record.status === 'approved' ? 'text-green-600 font-medium text-center' :
+                    record.status === 'rejected' ? 'text-red-600 font-medium text-center' :
               'text-black text-center'
             }>
               {record.status}

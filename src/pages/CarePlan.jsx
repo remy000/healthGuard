@@ -201,11 +201,11 @@ const CarePlan = () => {
       isOpen={openModal}
       onRequestClose={closeModal}
       contentLabel="Add New Patient"
-      className="flex items-center h-[80%] w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
+      className="flex items-center h-auto w-[60%] bg-white px-6 py-3 rounded-lg shadow-lg"
       overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
     >
       <div className="rounded-lg flex flex-col justify-center h-full w-full items-center">
-        <h2 className="text-2xl font-bold mb-3 text-blue-700">Add Care Plan</h2>
+        <h2 className="text-2xl font-bold mb-3 text-blue-700">{hasPlan?"Update":"Add"} Care Plan</h2>
         {
           uploadError&&(
             <p className='text-center text-red-500 text-sm'>{error}</p>

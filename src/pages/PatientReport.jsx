@@ -40,7 +40,11 @@ useEffect(()=>{
       setError(error.message);
     } 
   }
+  const interval = setInterval(() => {
+    fetchReports();
+  }, 3000);
   fetchReports();
+  return () => clearInterval(interval);
 },[token,id]);
  
   const [modalIsOpen,setModalIsOpen]=useState(false);

@@ -69,7 +69,13 @@ const Resources = () => {
     setCurrentPlayingId(id);
     setIsModalOpen(true);
   };
-
+  const clearForm=()=>{
+    setResource({
+      title: '',
+      category: '',
+    });
+    setMessage('');
+  }
   const closeModal = () => {
     if (selectedVideo) {
       videoRefs.current[selectedVideo.resourceId].pause();
@@ -106,6 +112,8 @@ const Resources = () => {
       if (response.status === 200) {
         setMessage('Resource uploaded successfully');
         closeUploadModal();
+        clearForm();
+
       } else {
         setMessage('Failed to upload resource');
       }
@@ -144,7 +152,7 @@ const Resources = () => {
             >
              <FaPlayCircle size={45} color='white' className='ml-[8rem]'/>
             </button>
-            <div className='absolute top-36 left-6'>
+            <div className='absolute top-40 left-6'>
               <h3 className='text-white font-semibold text-md text-left'>{video.title}</h3>
               <h4 className='text-white font-semibold text-sm text-left'>{video.category}</h4>
             </div>

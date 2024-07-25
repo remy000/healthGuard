@@ -98,9 +98,9 @@ const handleSubmit=async(e)=>{
   return (
     <React.Fragment>
     <div className="container w-full h-full p-3 bg-gray-200">
-    <div className='flex justify-between mx-6 mt-4'>
+    <div className='flex justify-between mx-6 my-4'>
     <h1 className="text-4xl font-bold mb-6 text-blue-700">Patient Profile</h1>
-    <button onClick={openModal} className='text-blue-600 underline text-md font-semibold'>Update</button>
+    <button onClick={openModal} className='text-blue-600 py-1 px-4 text-md font-semibold'>Update</button>
     </div>
     {error&&(
       <p className="text-red-600 font-semibold m-2 text-sm">{error}</p>
@@ -118,7 +118,7 @@ const handleSubmit=async(e)=>{
         <div className="flex flex-col gap-3">
         
             
-            <div className="flex justify-between flex-col bg-white px-4 py-2 rounded-md shadow-md">
+            <div className="flex justify-between flex-col bg-white p-6 rounded-md shadow-md">
             <h2 className="text-xl text-center font-bold text-blue-700 mb-2">Personal Information</h2>
               <div className='flex flex-row mb-2'>
                 <img src="/src/assets/p1.webp" alt="" className='w-[100px] h-100px] object-cover rounded-md' />
@@ -133,7 +133,7 @@ const handleSubmit=async(e)=>{
               
               </div>
               </div>
-              <div className='px-4 py-2 bg-white rounded-md shadow-md pl-8 pb-4'>
+              <div className='p-6 bg-white rounded-md shadow-md'>
               <h2 className="text-xl text-center font-bold text-blue-700 mb-1">Over View</h2>
               <p className='flex flex-row gap-2 items-center'><MdDateRange /><span className="font-semibold text-gray-800 ">Birth Date:</span> {new Date(patient.birthDate).toLocaleDateString()}</p>
               <p className='flex flex-row gap-2 items-center'><BiSolidDonateBlood /><span className="font-semibold text-gray-800 ">Blood Group:</span> {patient.bloodGroup}</p>
@@ -142,7 +142,7 @@ const handleSubmit=async(e)=>{
               <p className='flex flex-row gap-2 items-center'><SiDatefns /><span className="font-semibold text-gray-800 ">Age:</span> {patient.age}</p>
               
               </div>
-            <div className="px-4 py-2 bg-white shadow-md rounded-md pl-8 pb-4">
+            <div className="p-4 bg-white shadow-md rounded-md pl-8 pb-4">
             <h2 className="text-xl text-center font-bold text-blue-700 mb-4">Medical Information</h2>
               <p className='flex flex-row gap-2 items-center'><MdSick /><span className="font-semibold text-gray-800 ">Sickness:</span> {patient.sickness}</p>
               <p className='flex flex-row gap-2 items-center'><FaAllergies /><span className="font-semibold text-gray-800 ">Allergies:</span> {patient.allergies}</p>

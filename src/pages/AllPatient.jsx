@@ -61,7 +61,7 @@ const AllPatient = () => {
   };
   const interval = setInterval(() => {
     fetchPatients();
-  }, 5000);
+  }, 3000);
   fetchPatients();
   return () => clearInterval(interval);
  },[token]);
@@ -131,7 +131,7 @@ const handleAssign=async(patid)=>{
       });
       
       if(response.status===200){
-        closeModal();
+        closeProfileModal();
         setLoading(false);
       }
       
@@ -319,8 +319,8 @@ const handleSubmit=async(e)=>{
       isOpen={openProfileModal}
       onRequestClose={closeProfileModal}
       contentLabel="Add New Patient"
-      className="flex items-center h-[98%] w-[60%] bg-white p-3 rounded-lg shadow-lg"
-      overlayClassName="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center"
+      className="flex items-center h-auto w-[60%] bg-white p-3 rounded-lg shadow-lg"
+      overlayClassName="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center"
     >
       <div className="container w-full h-full p-3 bg-white">
     <h1 className="text-xl font-bold mb-1 text-blue-700">Patient Profile</h1>
@@ -351,18 +351,20 @@ const handleSubmit=async(e)=>{
               {selectedPatient.assignedProvider==='no'?(
                 <>
             <label className="block font-semibold text-gray-700">HealthCare Provider</label>
-            {
-             providers.map((provider)=>(
-                 <>
-                  <select key={provider.providerId} value={providerId} onChange={(e)=>setProviderId(e.target.value)} name="provider"  className="w-[90%] p-2 border rounded-lg" required>
-              <option value="">Select Health Care Provider</option>
-              <option value={provider.providerId}>Dr {provider.names}</option>
-            </select>
-                 </>
-             ))
-            
-           
-             }
+            <select 
+            value={providerId} 
+            onChange={(e) => setProviderId(e.target.value)} 
+            name="provider"  
+            className="w-[90%] p-2 border rounded-lg" 
+            required
+          >
+            <option value="">Select Health Care Provider</option>
+            {providers.map((provider) => (
+              <option key={provider.providerId} value={provider.providerId}>
+                Dr {provider.names}
+              </option>
+            ))}
+          </select>
             </>
               ):(
                <div></div>
